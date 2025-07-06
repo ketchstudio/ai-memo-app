@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: ElevatedButton(
                 onPressed: () => context.push(route.path),
-                child: Text('Go to ${route.label} screen'),
+                child: Text('Move to ${route.label} screen'),
               ),
             ),
         ],
