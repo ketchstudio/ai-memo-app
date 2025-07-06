@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCt_yACLFatDC24XW85W820uTVYofoM0qM',
-    appId: '1:181935596332:android:83d7adfe6ac27621390289',
+    appId: '1:181935596332:android:456ed7087bae9b58390289',
     messagingSenderId: '181935596332',
     projectId: 'ai-note-app-ab9e9',
     storageBucket: 'ai-note-app-ab9e9.firebasestorage.app',
@@ -59,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCaIl4B8OpSFkboaF_gYAkkEpOd6AIcPaI',
-    appId: '1:181935596332:ios:a43e35674d5f05ab390289',
+    appId: '1:181935596332:ios:ecc14a7a0491db18390289',
     messagingSenderId: '181935596332',
     projectId: 'ai-note-app-ab9e9',
     storageBucket: 'ai-note-app-ab9e9.firebasestorage.app',
-    iosBundleId: 'com.ketchsoft.ana.dev',
+    iosBundleId: 'com.ketch.app.ai.note.dev',
   );
+
 }
