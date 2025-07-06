@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "181935596332",
+    "project_id": "ai-note-app-ab9e9",
+    "storage_bucket": "ai-note-app-ab9e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181935596332:android:456ed7087bae9b58390289",
+        "android_client_info": {
+          "package_name": "com.ketch.app.ai.note.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181935596332-r5ulqpdre35d5t4h75f8nfskfrjgf91l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt_yACLFatDC24XW85W820uTVYofoM0qM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181935596332-r5ulqpdre35d5t4h75f8nfskfrjgf91l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

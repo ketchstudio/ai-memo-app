@@ -1,0 +1,36 @@
+require 'dotenv'
+Dotenv.load
+
+default_platform(:android)
+
+platform :android do
+  desc "Build and upload release APK to Firebase App Distribution"
+  lane :firebase do
+    # Read FIREBASE_TOKEN from .env or environment
+    firebase_token = ENV["FIREBASE_TOKEN"]
+    if firebase_token.nil? || firebase_token.empty?
+      UI.user_error!("❌ FIREBASE_TOKEN is missing! Set it in .env or export it.")
+    end
+
+    # Replace with your actual Firebase Android App ID
+    firebase_app_id = "1:181935596332:android:456ed7087bae9b58390289"
+
+    # Build APK
+    UI.message("🏗️ Building release APK...")
+    sh("flutter build apk --release")
+
+    # Verify APK path
+    apk_path = "../../build/app/outputs/flutter-apk/app-release.apk"
+    unless File.exist?(apk_path)
+      UI.user_error!("❌ APK not found at #{apk_path}. Did the build fail?")
+    end
+
+    # Distribute to Firebase
+    UI.message("🚀 Uploading #{apk_path} to Firebase App Distribution...")
+    sh("firebase appdistribution:distribute #{apk_path} \
+      --app #{firebase_app_id} \
+      --token #{firebase_token} \
+      --groups internal-ana-tester \
+      --release-notes 'New release via Fastlane 🚀'")
+  end
+end

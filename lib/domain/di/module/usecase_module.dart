@@ -1,10 +1,10 @@
-import 'package:ana_flutter/domain/repository/memo_repository.dart';
 import 'package:ana_flutter/domain/usecase/memo/delete_memo_by_id_usecase.dart';
 import 'package:ana_flutter/domain/usecase/memo/edit_memo_usecase.dart';
 import 'package:ana_flutter/domain/usecase/memo/get_all_memo_usecase.dart';
 import 'package:ana_flutter/domain/usecase/memo/insert_memo_usecase.dart';
 
 import '../../../di/service_locator.dart';
+import '../../repositories/memo_repository.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {

@@ -1,6 +1,6 @@
 import 'package:ana_flutter/domain/models/Memo.dart';
 
-import '../../domain/repository/memo_repository.dart';
+import '../../domain/repositories/memo_repository.dart';
 import '../remote/memo_remote_datasource.dart';
 
 class DefaultMemoRepository extends MemoRepository {
