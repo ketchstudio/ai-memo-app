@@ -1,4 +1,4 @@
-package com.example.ana_flutter
+package com.ketch.app.ai.note.dev
 
 import io.flutter.embedding.android.FlutterActivity
 

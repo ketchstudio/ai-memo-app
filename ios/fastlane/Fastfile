@@ -1,44 +1,36 @@
-require 'dotenv'
-Dotenv.load
-
-default_platform(:ios)
-
-platform :ios do
-  desc "Build and distribute to Firebase App Distribution"
-  lane :firebase do
-    firebase_token = ENV["FIREBASE_TOKEN"]
-    if firebase_token.nil? || firebase_token.empty?
-      UI.user_error!("❌ FIREBASE_TOKEN is missing! Set it in .env or export it.")
-    end
-
-    # Replace with your actual Firebase iOS App ID
-    firebase_app_id = "1:181935596332:ios:ecc14a7a0491db18390289"
-
-    # Build IPA
-    UI.message("🏗️ Building iOS IPA...")
-    sh("flutter build ipa --release")
-
-    # Find the .ipa file
-    ipa_path = Dir["build/ios/ipa/*.ipa"].first
-    if ipa_path.nil? || !File.exist?(ipa_path)
-      UI.user_error!("❌ IPA file not found in build/ios/ipa/. Did the build fail?")
-    end
-
-    # Upload to Firebase
-    UI.message("🚀 Uploading #{ipa_path} to Firebase App Distribution...")
-    sh("firebase appdistribution:distribute #{ipa_path} \
-      --app #{firebase_app_id} \
-      --token #{firebase_token} \
-      --groups testers \
-      --release-notes 'iOS release via Fastlane 🚀'")
+lane :firebase do
+  firebase_token = ENV["FIREBASE_TOKEN"]
+  if firebase_token.nil? || firebase_token.empty?
+    UI.user_error!("❌ FIREBASE_TOKEN is missing! Set it in .env or export it.")
   end
 
-  desc "Build and upload to TestFlight"
-  lane :testflight do
-    UI.message("📦 Building for TestFlight...")
-    build_ios_app(scheme: "Runner")
+  firebase_app_id = "1:181935596332:ios:ecc14a7a0491db18390289"
 
-    UI.message("🚀 Uploading to TestFlight...")
-    upload_to_testflight
+  UI.message("🏗️ Building Flutter project...")
+  sh("flutter clean && flutter pub get && flutter build ipa --release")
+
+  UI.message("📦 Archiving & exporting IPA (manual signing)...")
+  build_ios_app(
+    scheme: "Runner",
+    export_method: "app-store",
+    export_options: {
+      method: "app-store",
+      signingStyle: "manual",
+      provisioningProfiles: {
+        "com.ketch.app.ai.note.dev" => "AppStore com.ketch.app.ai.note.dev"
+      }
+    }
+  )
+
+  ipa_path = Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
+  if ipa_path.nil? || !File.exist?(ipa_path)
+    UI.user_error!("❌ IPA file not found after export.")
   end
+
+  UI.message("🚀 Uploading #{ipa_path} to Firebase App Distribution...")
+  sh("firebase appdistribution:distribute #{ipa_path} \
+    --app #{firebase_app_id} \
+    --token #{firebase_token} \
+    --groups testers \
+    --release-notes 'iOS release via Fastlane 🚀'")
 end
