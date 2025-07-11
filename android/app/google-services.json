@@ -29,6 +29,13 @@
             {
               "client_id": "181935596332-r5ulqpdre35d5t4h75f8nfskfrjgf91l.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "181935596332-6cephn7e54ipcjroih96jbvjurr760ne.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ketch.app.ai.note.dev"
+              }
             }
           ]
         }

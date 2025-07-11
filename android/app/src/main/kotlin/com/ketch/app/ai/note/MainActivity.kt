@@ -1,4 +1,4 @@
-package com.ketch.app.ai.note.dev
+package com.ketch.app.ai.note
 
 import io.flutter.embedding.android.FlutterActivity
 
