@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:ana_flutter/core/domain/use_case.dart';
 
-import '../../models/Memo.dart';
+import '../../models/memo.dart';
 import '../../repositories/memo_repository.dart';
 
 class GetAllMemoUseCase extends UseCase<List<Memo>, void> {

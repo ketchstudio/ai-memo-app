@@ -5,6 +5,9 @@ class MindMapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("MindMapScreen")));
+    return Scaffold(
+      appBar: AppBar(title: const Text('MindMap'), leading: BackButton()),
+      body: Center(child: Text("MindMapScreen")),
+    );
   }
 }

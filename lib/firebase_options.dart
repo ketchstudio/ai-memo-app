@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'ai-note-app-ab9e9.firebasestorage.app',
     iosBundleId: 'com.ketch.app.ai.note.dev',
   );
-
 }

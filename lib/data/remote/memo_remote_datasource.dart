@@ -1,4 +1,4 @@
-import '../../domain/models/Memo.dart';
+import '../../domain/models/memo.dart';
 
 class MemoRemoteDataSource {
   Future<void> deleteAllMemos() {

@@ -1,4 +1,5 @@
 import 'package:ana_flutter/presentation/routers/app_router.dart';
+import 'package:ana_flutter/presentation/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AnaApp extends StatelessWidget {
@@ -8,7 +9,7 @@ class AnaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'ANA',
-      theme: ThemeData.dark(useMaterial3: true),
+      theme: lightTheme,
       routerConfig: appRouter,
     );
   }

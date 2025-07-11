@@ -5,6 +5,12 @@ class LanguageSettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("LanguageSettingScreen")));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('LanguageSetting'),
+        leading: BackButton(),
+      ),
+      body: Center(child: Text("LanguageSettingScreen")),
+    );
   }
 }

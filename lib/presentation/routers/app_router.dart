@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../create_folder/create_folder_screen.dart';
 import '../edit_memo/edit_memo_screen.dart';
+import '../explore/explore_screen.dart';
 import '../home/home_screen.dart';
 import '../memo_detail/memo_detail_screen.dart';
 import '../mindmap/mind_map_screen.dart';
@@ -50,6 +51,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoute.translate.path,
       name: AppRoute.translate.name,
       builder: (context, state) => const TranslateScreen(),
+    ),
+    GoRoute(
+      path: AppRoute.explore.path,
+      name: AppRoute.explore.name,
+      builder: (context, state) => const ExploreScreen(),
     ),
   ],
 );

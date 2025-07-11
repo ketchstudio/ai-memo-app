@@ -5,6 +5,9 @@ class TranslateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("TranslateScreen")));
+    return Scaffold(
+      appBar: AppBar(title: const Text('Translate'), leading: BackButton()),
+      body: Center(child: Text("TranslateScreen")),
+    );
   }
 }
