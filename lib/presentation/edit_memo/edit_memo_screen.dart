@@ -5,6 +5,9 @@ class EditMemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("EditMemoScreen")));
+    return Scaffold(
+      appBar: AppBar(title: const Text('EditMemo'), leading: BackButton()),
+      body: Center(child: Text("EditMemoScreen")),
+    );
   }
 }

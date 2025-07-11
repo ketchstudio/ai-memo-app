@@ -5,6 +5,9 @@ class CreateFolderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("CreateFolderScreen")));
+    return Scaffold(
+      appBar: AppBar(title: const Text('CreateFolder'), leading: BackButton()),
+      body: Center(child: Text("CreateFolderScreen")),
+    );
   }
 }

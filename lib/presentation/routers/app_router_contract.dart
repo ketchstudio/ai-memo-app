@@ -12,7 +12,8 @@ enum AppRoute {
   memoDetail(path: '/memo-detail', name: 'memoDetail', label: 'Memo Detail'),
   mindMap(path: '/mind-map', name: 'mindMap', label: 'Mind Map'),
   settings(path: '/settings', name: 'settings', label: 'Settings'),
-  translate(path: '/translate', name: 'translate', label: 'Translate');
+  translate(path: '/translate', name: 'translate', label: 'Translate'),
+  explore(path: '/explore', name: 'explore', label: 'explore');
 
   const AppRoute({required this.path, required this.name, required this.label});
 

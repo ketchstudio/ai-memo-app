@@ -1,50 +1,66 @@
+import 'package:ana_flutter/presentation/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final List<String> folders;
-  final String selectedFolder;
-  final Function(String) onFolderSelected;
-  final VoidCallback onNavigateToSettings;
+class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onSettingsPressed;
 
-  const HomeAppBar({
-    super.key,
-    required this.folders,
-    required this.selectedFolder,
-    required this.onFolderSelected,
-    required this.onNavigateToSettings,
-  });
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  const MainAppBar({super.key, required this.onSettingsPressed});
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: PopupMenuButton<String>(
-        borderRadius: BorderRadius.circular(8),
-        onSelected: onFolderSelected,
-        itemBuilder: (context) => folders
-            .map((folder) => PopupMenuItem(value: folder, child: Text(folder)))
-            .toList(),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.folder),
-              const SizedBox(width: 8),
-              Text(selectedFolder),
-              const Icon(Icons.arrow_drop_down),
-            ],
-          ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            // Left Icon (App Logo)
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: Colors.purpleAccent,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                size: 20,
+                Icons.memory,
+                color: Colors.white,
+              ), // brain icon replacement
+            ),
+
+            SizedBox(width: 12),
+
+            // Title
+            Expanded(
+              child: Text(
+                'iMemo',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.dark,
+                ),
+              ),
+            ),
+
+            // Settings Icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: onSettingsPressed,
+                icon: Icon(Icons.settings, color: Colors.black87),
+              ),
+            ),
+          ],
         ),
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: onNavigateToSettings,
-        ),
-      ],
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(100);
 }

@@ -5,6 +5,9 @@ class MemoDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("MemoDetailScreen")));
+    return Scaffold(
+      appBar: AppBar(title: const Text('MemoDetail'), leading: BackButton()),
+      body: Center(child: Text("MemoDetailScreen")),
+    );
   }
 }
