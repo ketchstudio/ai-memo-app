@@ -1,4 +1,4 @@
-import 'package:ana_flutter/presentation/theme/app_colors.dart';
+import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -18,8 +18,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: Colors.purpleAccent,
-                borderRadius: BorderRadius.circular(16),
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 size: 20,
@@ -34,11 +34,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Expanded(
               child: Text(
                 'iMemo',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.dark,
-                ),
+                style: AppTextStyles.headlineMedium(
+                  context,
+                ).withFontWeight(FontWeight.bold),
               ),
             ),
 
