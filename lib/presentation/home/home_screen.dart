@@ -4,8 +4,10 @@ import 'package:ana_flutter/presentation/home/search_bar.dart';
 import 'package:ana_flutter/presentation/routers/app_router_contract.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../app/bloc/theme_cubit.dart';
 import 'action/note_create_option_bottomsheet.dart';
 import 'folder/folder_card.dart';
 import 'folder/folder_contract.dart';
@@ -23,7 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(
+        isDarkMode: context.read<ThemeCubit>().state == ThemeMode.dark,
         onSettingsPressed: () => context.push(AppRoute.settings.path),
+        onModeChanged: () => context.read<ThemeCubit>().toggleTheme(),
       ),
       body: SafeArea(
         child: Stack(
