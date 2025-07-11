@@ -1,10 +1,22 @@
+import 'package:ana_flutter/presentation/app/bloc/theme_cubit.dart';
+import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool isDarkMode;
   final VoidCallback onSettingsPressed;
+  final VoidCallback onModeChanged;
+  final VoidCallback onLogoutPressed;
 
-  const MainAppBar({super.key, required this.onSettingsPressed});
+  const MainAppBar({
+    super.key,
+    required this.isDarkMode,
+    required this.onSettingsPressed,
+    required this.onModeChanged,
+    required this.onLogoutPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +31,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 32,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppBorderRadius.field,
               ),
               child: Icon(
                 size: 20,
@@ -40,6 +52,38 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
 
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[100],
+              ),
+              child: IconButton(
+                tooltip: 'Toggle Theme',
+                icon: Icon(
+                  isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                  color: Colors.black87,
+                ),
+                onPressed: () => context.read<ThemeCubit>().toggleTheme(),
+              ),
+            ),
+
+            SizedBox(width: 6),
+            // Logout Icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: onLogoutPressed,
+                icon: Icon(Icons.exit_to_app, color: Colors.black87),
+              ),
+            ),
+            SizedBox(width: 6),
             // Settings Icon
             Container(
               width: 40,

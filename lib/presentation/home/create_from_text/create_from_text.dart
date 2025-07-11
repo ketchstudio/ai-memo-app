@@ -1,4 +1,9 @@
+import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.dart';
+import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
+import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/presentation/widget/inverse_text_button.dart';
 
 void showCreateTextNoteDialog(BuildContext context) {
   showModalBottomSheet(
@@ -12,7 +17,7 @@ void showCreateTextNoteDialog(BuildContext context) {
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppBorderRadius.card,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -40,15 +45,9 @@ void showCreateTextNoteDialog(BuildContext context) {
 
                 // Title input
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: appInputDecoration(
+                    context: context,
                     hintText: 'Note title...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
                   ),
                 ),
 
@@ -59,13 +58,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                   minLines: 10,
                   maxLines: 10,
                   maxLength: 10_000_000,
-                  decoration: InputDecoration(
+                  decoration: appInputDecoration(
+                    context: context,
                     hintText: 'Start typing your note...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.black12),
-                    ),
-                    contentPadding: EdgeInsets.all(16),
                   ),
                 ),
 
@@ -75,37 +70,27 @@ void showCreateTextNoteDialog(BuildContext context) {
                 Row(
                   children: [
                     Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey[100],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                      child: InverseTextButton(
+                        text: 'Cancel',
                         onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: Colors.black87),
-                        ),
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.1),
+                        textStyle: AppTextStyles.bodyMedium(
+                          context,
+                        ).withFontWeight(FontWeight.bold),
+                        textColor: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     SizedBox(width: 12),
                     Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: Color(0xFF6366F1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                      child: InverseTextButton(
+                        text: 'Save Note',
                         onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          'Save Note',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        textStyle: AppTextStyles.bodyMedium(
+                          context,
+                        ).withFontWeight(FontWeight.bold),
                       ),
                     ),
                   ],

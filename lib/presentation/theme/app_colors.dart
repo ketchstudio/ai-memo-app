@@ -1,3 +1,4 @@
+import 'package:ana_flutter/presentation/theme/app_text_theme.dart';
 import 'package:flutter/material.dart';
 
 /// A class to hold the custom color palette for the application.
@@ -64,9 +65,39 @@ final ThemeData lightTheme = ThemeData(
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.primary,
   ),
-  textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: AppColors.dark),
-    bodyMedium: TextStyle(color: Color(0xFF6B7280)), // gray-500
-    titleLarge: TextStyle(color: AppColors.dark, fontWeight: FontWeight.bold),
+  textTheme: AppTextThemes.light,
+);
+
+final ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: AppColors.primary,
+  scaffoldBackgroundColor: AppColors.dark,
+  colorScheme: const ColorScheme.dark(
+    primary: AppColors.primary,
+    secondary: AppColors.secondary,
+    tertiary: AppColors.accent,
+    surfaceContainerHighest: AppColors.light,
+    surface: Color(0xFF111827), // gray-900 background
+    onSurface: AppColors.light,
+    error: Colors.redAccent,
+    onError: Colors.white,
   ),
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xFF111827),
+    elevation: 1,
+    iconTheme: IconThemeData(color: AppColors.light),
+    titleTextStyle: TextStyle(
+      color: AppColors.light,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  buttonTheme: const ButtonThemeData(
+    buttonColor: AppColors.primary,
+    textTheme: ButtonTextTheme.primary,
+  ),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: AppColors.primary,
+  ),
+  textTheme: AppTextThemes.dark,
 );

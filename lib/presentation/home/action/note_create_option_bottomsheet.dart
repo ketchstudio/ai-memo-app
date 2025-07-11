@@ -1,6 +1,7 @@
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/app_border_radius.dart';
 import 'note_create_option.dart';
 
 void showNoteCreateOptionBottomSheet(
@@ -9,9 +10,7 @@ void showNoteCreateOptionBottomSheet(
 ) {
   showModalBottomSheet(
     context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.card),
     isScrollControlled: true,
     builder: (context) => Padding(
       padding: const EdgeInsets.all(20),
@@ -67,11 +66,11 @@ Widget _buildOption({
     margin: EdgeInsets.only(bottom: 8),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppBorderRadius.card,
     ),
     child: InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: AppBorderRadius.card,
       child: Container(
         padding: EdgeInsets.all(16),
         child: Row(
