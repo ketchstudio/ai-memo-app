@@ -20,7 +20,7 @@ class FolderCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: 12),
       child: InkWell(
         onTap: () => onFolderSelected(folder.id),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppBorderRadius.card,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(

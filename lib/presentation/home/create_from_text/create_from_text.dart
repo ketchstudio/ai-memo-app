@@ -1,6 +1,9 @@
 import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.dart';
+import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/presentation/widget/inverse_text_button.dart';
 
 void showCreateTextNoteDialog(BuildContext context) {
   showModalBottomSheet(
@@ -14,7 +17,7 @@ void showCreateTextNoteDialog(BuildContext context) {
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppBorderRadius.card,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -67,42 +70,27 @@ void showCreateTextNoteDialog(BuildContext context) {
                 Row(
                   children: [
                     Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey[100],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                      child: InverseTextButton(
+                        text: 'Cancel',
                         onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          'Cancel',
-                          style: AppTextStyles.bodyMedium(
-                            context,
-                          ).withFontWeight(FontWeight.bold),
-                        ),
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.1),
+                        textStyle: AppTextStyles.bodyMedium(
+                          context,
+                        ).withFontWeight(FontWeight.bold),
+                        textColor: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     SizedBox(width: 12),
                     Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                      child: InverseTextButton(
+                        text: 'Save Note',
                         onPressed: () => Navigator.pop(context),
-                        child: Text(
-                          'Save Note',
-                          style: AppTextStyles.bodyMedium(context)
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )
-                              .withFontWeight(FontWeight.bold),
-                        ),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        textStyle: AppTextStyles.bodyMedium(
+                          context,
+                        ).withFontWeight(FontWeight.bold),
                       ),
                     ),
                   ],

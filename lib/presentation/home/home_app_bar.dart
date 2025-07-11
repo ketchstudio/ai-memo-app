@@ -1,3 +1,4 @@
+import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 32,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppBorderRadius.field,
               ),
               child: Icon(
                 size: 20,
