@@ -1,15 +1,14 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<void> signInWithGoogle();
+  /// Listen to raw Supabase session events
+  Stream<Session?> authStateChanges();
 
-  Future<void> signInWithApple();
+  /// Get current raw Supabase session
+  Session? getCurrentSession();
 
+  /// Sign out
   Future<void> signOut();
-
-  bool isSignedIn();
-
-  User? getCurrentUser();
 }
 
 class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
@@ -18,33 +17,14 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
   SupabaseAuthRemoteDataSource(this._client);
 
   @override
-  Future<void> signInWithGoogle() async {
-    await _client.auth.signInWithOAuth(
-      OAuthProvider.google,
-      redirectTo: 'com.ketchsoft.ana.dev://login-callback/',
-    );
-  }
+  Stream<Session?> authStateChanges() =>
+      _client.auth.onAuthStateChange.map((e) => e.session);
 
   @override
-  Future<void> signInWithApple() async {
-    await _client.auth.signInWithOAuth(
-      OAuthProvider.apple,
-      redirectTo: 'com.ketchsoft.ana.dev://login-callback/',
-    );
-  }
+  Session? getCurrentSession() => _client.auth.currentSession;
 
   @override
   Future<void> signOut() async {
     await _client.auth.signOut();
-  }
-
-  @override
-  bool isSignedIn() {
-    return _client.auth.currentSession != null;
-  }
-
-  @override
-  User? getCurrentUser() {
-    return _client.auth.currentUser;
   }
 }

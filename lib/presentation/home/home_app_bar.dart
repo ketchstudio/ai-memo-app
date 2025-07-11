@@ -8,12 +8,14 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDarkMode;
   final VoidCallback onSettingsPressed;
   final VoidCallback onModeChanged;
+  final VoidCallback onLogoutPressed;
 
   const MainAppBar({
     super.key,
     required this.isDarkMode,
     required this.onSettingsPressed,
     required this.onModeChanged,
+    required this.onLogoutPressed,
   });
 
   @override
@@ -53,18 +55,35 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[100],
+              ),
               child: IconButton(
                 tooltip: 'Toggle Theme',
                 icon: Icon(
                   isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                  color: isDarkMode ? Colors.white : Colors.black87,
+                  color: Colors.black87,
                 ),
                 onPressed: () => context.read<ThemeCubit>().toggleTheme(),
               ),
             ),
 
-            SizedBox(width: 12),
+            SizedBox(width: 6),
+            // Logout Icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: onLogoutPressed,
+                icon: Icon(Icons.exit_to_app, color: Colors.black87),
+              ),
+            ),
+            SizedBox(width: 6),
             // Settings Icon
             Container(
               width: 40,

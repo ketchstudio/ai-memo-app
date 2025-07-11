@@ -1,61 +1,75 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../create_folder/create_folder_screen.dart';
 import '../edit_memo/edit_memo_screen.dart';
 import '../explore/explore_screen.dart';
 import '../home/home_screen.dart';
+import '../login/login_screen.dart';
 import '../memo_detail/memo_detail_screen.dart';
 import '../mindmap/mind_map_screen.dart';
 import '../settings/settings_screen.dart';
 import '../translate/translate_screen.dart';
-import 'app_router_contract.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+class AppRouter {
+  final bool isAuth;
+  late final GoRouter router;
 
-final GoRouter appRouter = GoRouter(
-  navigatorKey: _rootNavigatorKey,
-  initialLocation: AppRoute.home.path,
-  routes: [
-    GoRoute(
-      path: AppRoute.home.path,
-      name: AppRoute.home.name,
-      builder: (context, state) => HomeScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.createFolder.path,
-      name: AppRoute.createFolder.name,
-      builder: (context, state) => const CreateFolderScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.editMemo.path,
-      name: AppRoute.editMemo.name,
-      builder: (context, state) => const EditMemoScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.memoDetail.path,
-      name: AppRoute.memoDetail.name,
-      builder: (context, state) => const MemoDetailScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.mindMap.path,
-      name: AppRoute.mindMap.name,
-      builder: (context, state) => const MindMapScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.settings.path,
-      name: AppRoute.settings.name,
-      builder: (context, state) => const SettingsScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.translate.path,
-      name: AppRoute.translate.name,
-      builder: (context, state) => const TranslateScreen(),
-    ),
-    GoRoute(
-      path: AppRoute.explore.path,
-      name: AppRoute.explore.name,
-      builder: (context, state) => const ExploreScreen(),
-    ),
-  ],
-);
+  AppRouter({required this.isAuth}) {
+    router = GoRouter(
+      initialLocation: '/home',
+      redirect: (context, state) {
+        final loggingIn = state.path == '/login';
+        if (!isAuth && !loggingIn) return '/login';
+        if (isAuth && loggingIn) return '/home';
+        return null;
+      },
+      routes: [
+        GoRoute(
+          path: '/login',
+          name: 'login',
+          builder: (_, _) => const LoginScreen(), // replace with LoginScreen
+        ),
+        GoRoute(
+          path: '/home',
+          name: 'home',
+          builder: (_, _) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/create-folder',
+          name: 'createFolder',
+          builder: (_, _) => const CreateFolderScreen(),
+        ),
+        GoRoute(
+          path: '/edit-memo',
+          name: 'editMemo',
+          builder: (_, _) => const EditMemoScreen(),
+        ),
+        GoRoute(
+          path: '/memo-detail',
+          name: 'memoDetail',
+          builder: (_, _) => const MemoDetailScreen(),
+        ),
+        GoRoute(
+          path: '/mind-map',
+          name: 'mindMap',
+          builder: (_, _) => const MindMapScreen(),
+        ),
+        GoRoute(
+          path: '/settings',
+          name: 'settings',
+          builder: (_, _) => const SettingsScreen(),
+        ),
+        GoRoute(
+          path: '/translate',
+          name: 'translate',
+          builder: (_, _) => const TranslateScreen(),
+        ),
+        GoRoute(
+          path: '/explore',
+          name: 'explore',
+          builder: (_, _) => const ExploreScreen(),
+        ),
+      ],
+    );
+  }
+}
