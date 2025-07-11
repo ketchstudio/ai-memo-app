@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppTextStyles {
+  AppTextStyles._();
+
   static TextStyle displayLarge(BuildContext context) =>
       Theme.of(context).textTheme.displayLarge!;
 

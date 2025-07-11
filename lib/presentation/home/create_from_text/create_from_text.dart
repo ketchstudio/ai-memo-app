@@ -1,3 +1,5 @@
+import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.dart';
+import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 void showCreateTextNoteDialog(BuildContext context) {
@@ -40,15 +42,9 @@ void showCreateTextNoteDialog(BuildContext context) {
 
                 // Title input
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: appInputDecoration(
+                    context: context,
                     hintText: 'Note title...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
                   ),
                 ),
 
@@ -59,13 +55,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                   minLines: 10,
                   maxLines: 10,
                   maxLength: 10_000_000,
-                  decoration: InputDecoration(
+                  decoration: appInputDecoration(
+                    context: context,
                     hintText: 'Start typing your note...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.black12),
-                    ),
-                    contentPadding: EdgeInsets.all(16),
                   ),
                 ),
 
@@ -85,7 +77,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                         onPressed: () => Navigator.pop(context),
                         child: Text(
                           'Cancel',
-                          style: TextStyle(color: Colors.black87),
+                          style: AppTextStyles.bodyMedium(
+                            context,
+                          ).withFontWeight(FontWeight.bold),
                         ),
                       ),
                     ),
@@ -93,7 +87,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                     Expanded(
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: Color(0xFF6366F1),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -101,10 +97,11 @@ void showCreateTextNoteDialog(BuildContext context) {
                         onPressed: () => Navigator.pop(context),
                         child: Text(
                           'Save Note',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: AppTextStyles.bodyMedium(context)
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              )
+                              .withFontWeight(FontWeight.bold),
                         ),
                       ),
                     ),
