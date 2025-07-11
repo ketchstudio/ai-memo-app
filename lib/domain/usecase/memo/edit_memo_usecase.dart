@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import '../../../core/domain/use_case.dart';
-import '../../models/Memo.dart';
+import '../../models/memo.dart';
 import '../../repositories/memo_repository.dart';
 
 class EditMemoUseCase extends UseCase<void, Memo> {

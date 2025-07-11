@@ -1,4 +1,4 @@
-import '../models/Memo.dart';
+import '../models/memo.dart';
 
 abstract class MemoRepository {
   Future<List<Memo>> getMemos();

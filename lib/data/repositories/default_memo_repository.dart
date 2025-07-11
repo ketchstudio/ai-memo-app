@@ -1,5 +1,4 @@
-import 'package:ana_flutter/domain/models/Memo.dart';
-
+import '../../domain/models/memo.dart';
 import '../../domain/repositories/memo_repository.dart';
 import '../remote/memo_remote_datasource.dart';
 
