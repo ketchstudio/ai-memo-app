@@ -7,4 +7,5 @@ class EnvironmentKey {
   static const String supabaseAnonKey = "SUPABASE_ANON_KEY";
   static const String webClientUrl = "WEB_CLIENT_URL";
   static const String iosClientUrl = "IOS_CLIENT_URL";
+  static const String supabaseRedirectUrl = "SUPABASE_REDIRECT_URL";
 }

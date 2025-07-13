@@ -34,7 +34,7 @@
 
                 <data
                     android:host="login-callback"
-                    android:scheme="com.ketchsoft.ana.dev" />
+                    android:scheme="com.ketch.app.ai.note.dev" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

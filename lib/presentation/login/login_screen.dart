@@ -57,7 +57,6 @@ class LoginScreen extends StatelessWidget {
                   const Text(
                     'Sign in to access your AI notes and sync across devices',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black54),
                   ),
                   const SizedBox(height: 24),
                   SupaSocialsAuth(
@@ -69,8 +68,10 @@ class LoginScreen extends StatelessWidget {
                       OAuthProvider.apple,
                       OAuthProvider.google,
                     ],
+                    redirectUrl: getEnvVariable(
+                      EnvironmentKey.supabaseRedirectUrl,
+                    ),
                     colored: true,
-                    redirectUrl: null,
                     onSuccess: (Session response) {},
                     onError: (error) {},
                   ),
