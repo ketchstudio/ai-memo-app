@@ -1,39 +1,20 @@
-import '../../domain/models/memo.dart';
+import 'package:ana_flutter/domain/models/app_error.dart';
+import 'package:result_dart/result_dart.dart';
+
+import '../../core/result/result_ext.dart';
+import '../../domain/models/create_note_request.dart';
 import '../../domain/repositories/memo_repository.dart';
-import '../remote/memo_remote_datasource.dart';
+import '../remote/domain/note_remote_datasource.dart';
 
-class DefaultMemoRepository extends MemoRepository {
-  final MemoRemoteDataSource _memoRemoteDataSource;
+class DefaultNoteRepository implements NoteRepository {
+  final NoteRemoteDataSource remoteDataSource;
 
-  DefaultMemoRepository(this._memoRemoteDataSource);
-
-  @override
-  Future<void> deleteAllMemos() {
-    return _memoRemoteDataSource.deleteAllMemos();
-  }
+  DefaultNoteRepository(this.remoteDataSource);
 
   @override
-  Future<void> deleteById(String id) {
-    return _memoRemoteDataSource.deleteById(id);
-  }
-
-  @override
-  Future<Memo?> findMemoById(String id) {
-    return _memoRemoteDataSource.findMemoById(id);
-  }
-
-  @override
-  Future<List<Memo>> getMemos() {
-    return _memoRemoteDataSource.getMemos();
-  }
-
-  @override
-  Future<void> insert(Memo memo) {
-    return _memoRemoteDataSource.insert(memo);
-  }
-
-  @override
-  Future<void> update(Memo memo) {
-    return _memoRemoteDataSource.update(memo);
+  AsyncResultDart<Nothing, AppError> createNote({
+    required CreateNoteRequest body,
+  }) {
+    return runCatchingAsync(() => remoteDataSource.pushNote(body: body));
   }
 }
