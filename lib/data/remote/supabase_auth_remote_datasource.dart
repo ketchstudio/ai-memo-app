@@ -1,15 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-abstract class AuthRemoteDataSource {
-  /// Listen to raw Supabase session events
-  Stream<Session?> authStateChanges();
-
-  /// Get current raw Supabase session
-  Session? getCurrentSession();
-
-  /// Sign out
-  Future<void> signOut();
-}
+import 'domain/auth_remote_datasource.dart';
 
 class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
   final SupabaseClient _client;
@@ -26,5 +17,15 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     await _client.auth.signOut();
+  }
+
+  @override
+  bool isSignedIn() {
+    return _client.auth.currentSession != null;
+  }
+
+  @override
+  User? getCurrentUser() {
+    return _client.auth.currentUser;
   }
 }

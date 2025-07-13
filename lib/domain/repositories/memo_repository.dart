@@ -1,15 +1,11 @@
-import '../models/memo.dart';
+import 'package:ana_flutter/core/result/result_ext.dart';
+import 'package:ana_flutter/domain/models/app_error.dart';
+import 'package:result_dart/result_dart.dart';
 
-abstract class MemoRepository {
-  Future<List<Memo>> getMemos();
+import '../models/create_note_request.dart';
 
-  Future<Memo?> findMemoById(String id);
-
-  Future<void> insert(Memo memo);
-
-  Future<void> update(Memo memo);
-
-  Future<void> deleteById(String id);
-
-  Future<void> deleteAllMemos();
+abstract class NoteRepository {
+  AsyncResultDart<Nothing, AppError> createNote({
+    required CreateNoteRequest body,
+  });
 }

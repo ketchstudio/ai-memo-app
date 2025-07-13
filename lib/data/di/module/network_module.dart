@@ -1,4 +1,5 @@
-import 'package:ana_flutter/data/remote/memo_remote_datasource.dart';
+import 'package:ana_flutter/data/remote/domain/note_remote_datasource.dart';
+import 'package:ana_flutter/data/remote/supabase_note_remote_datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../di/service_locator.dart';
@@ -10,7 +11,9 @@ class NetworkModule {
     getIt.registerSingleton<SupabaseClient>(Supabase.instance.client);
 
     // Registering remote data sources
-    getIt.registerSingleton<MemoRemoteDataSource>(MemoRemoteDataSource());
+    getIt.registerSingleton<NoteRemoteDataSource>(
+      SupabaseNoteRemoteDataSource(getIt<SupabaseClient>()),
+    );
     getIt.registerSingleton<SupabaseAuthRemoteDataSource>(
       SupabaseAuthRemoteDataSource(getIt<SupabaseClient>()),
     );
