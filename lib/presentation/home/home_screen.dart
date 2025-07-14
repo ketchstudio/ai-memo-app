@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../app/bloc/folder/folder_bloc.dart';
+import '../app/bloc/folder/folder_state.dart';
 import '../app/bloc/theme_cubit.dart';
 import 'action/note_create_option_bottomsheet.dart';
 import 'folder/folder_card.dart';
@@ -58,19 +60,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(height: 8),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: folders
-                          .map(
-                            (f) => FolderCard(
-                              folder: f,
-                              onFolderSelected: (String id) {},
-                            ),
-                          )
-                          .toList(),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: BlocBuilder<FolderBloc, FolderState>(
+                        builder: (context, state) {
+                          if (state is FolderLoading) {
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          if (state is FolderFailure) {
+                            return Center(child: Text(state.message));
+                          }
+                          if (state is FolderLoadSuccess) {
+                            final folderUiItems = state.folders
+                                .map((e) => e.toUiItem())
+                                .toList();
+                            return Row(
+                              children: folderUiItems
+                                  .map(
+                                    (item) => FolderCard(
+                                      folder: item,
+                                      onFolderSelected: (_) {},
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
                     ),
                   ),
                 ),

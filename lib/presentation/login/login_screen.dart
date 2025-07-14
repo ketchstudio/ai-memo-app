@@ -72,6 +72,7 @@ class LoginScreen extends StatelessWidget {
                       EnvironmentKey.supabaseRedirectUrl,
                     ),
                     colored: true,
+                    showSuccessSnackBar: false,
                     onSuccess: (Session response) {},
                     onError: (error) {},
                   ),

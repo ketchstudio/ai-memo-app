@@ -1,4 +1,6 @@
+import 'package:ana_flutter/data/remote/domain/folder_remote_datasource.dart';
 import 'package:ana_flutter/data/remote/domain/note_remote_datasource.dart';
+import 'package:ana_flutter/data/remote/supabase_folder_remote_datasource.dart';
 import 'package:ana_flutter/data/remote/supabase_note_remote_datasource.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -16,6 +18,9 @@ class NetworkModule {
     );
     getIt.registerSingleton<SupabaseAuthRemoteDataSource>(
       SupabaseAuthRemoteDataSource(getIt<SupabaseClient>()),
+    );
+    getIt.registerSingleton<FolderRemoteDataSource>(
+      SupabaseFolderDataSource(getIt<SupabaseClient>()),
     );
   }
 }
