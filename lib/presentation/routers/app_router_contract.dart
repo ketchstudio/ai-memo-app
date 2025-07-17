@@ -13,7 +13,12 @@ enum AppRoute {
   mindMap(path: '/mind-map', name: 'mindMap', label: 'Mind Map'),
   settings(path: '/settings', name: 'settings', label: 'Settings'),
   translate(path: '/translate', name: 'translate', label: 'Translate'),
-  explore(path: '/explore', name: 'explore', label: 'explore');
+  explore(path: '/explore', name: 'explore', label: 'explore'),
+  folderManagement(
+    path: '/folder-management',
+    name: 'folderManagement',
+    label: 'Folder Management',
+  );
 
   const AppRoute({required this.path, required this.name, required this.label});
 

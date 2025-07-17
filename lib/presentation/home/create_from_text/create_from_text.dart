@@ -1,5 +1,9 @@
 import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.dart';
+import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
+import 'package:ana_flutter/presentation/app/bloc/folder/folder_bloc.dart';
+import 'package:ana_flutter/presentation/app/bloc/folder/folder_state.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/bloc/create_note_from_text_bloc.dart';
+import 'package:ana_flutter/presentation/home/create_from_text/widget/folder_selector.dart';
 import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +19,18 @@ void showCreateTextNoteDialog(BuildContext context) {
     backgroundColor: Colors.transparent,
     context: context,
     builder: (context) {
-      final titleController = TextEditingController();
-      final contentController = TextEditingController();
       return BlocProvider(
-        create: (context) => CreateNoteFromTextBloc(),
-        child: BlocBuilder<CreateNoteFromTextBloc, CreateNoteFromTextState>(
+        create: (context) => CreateTextNoteBloc(),
+        child: BlocConsumer<CreateTextNoteBloc, CreateTextNoteState>(
+          listener: (context, state) {
+            if (state.status == CreateTextNoteStatus.success) {
+              Navigator.popUntil(context, (route) => route.isFirst);
+              SnackbarManager.show(
+                message: 'Note created successfully!',
+                type: SnackbarType.success,
+              );
+            }
+          },
           builder: (context, state) {
             return Center(
               child: Container(
@@ -53,20 +64,59 @@ void showCreateTextNoteDialog(BuildContext context) {
                       ),
                       SizedBox(height: 16),
 
+                      if (state.errorMessage != null &&
+                          state.errorMessage!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            state.errorMessage ?? '',
+                            style: AppTextStyles.bodyMedium(context)
+                                .copyWith(color: Colors.red)
+                                .withFontWeight(FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+
                       // Title input
                       TextField(
-                        controller: titleController,
                         decoration: appInputDecoration(
                           context: context,
                           hintText: 'Note title...',
                         ),
+                        onChanged: (v) => context
+                            .read<CreateTextNoteBloc>()
+                            .add(TitleChanged(v)),
+                      ),
+
+                      SizedBox(height: 16),
+
+                      // Folder selector
+                      BlocBuilder<FolderBloc, FolderState>(
+                        builder: (context, folderState) {
+                          return Stack(
+                            children: [
+                              FolderSelector(
+                                folders: folderState.folders,
+                                selectedIndex: folderState.folders.indexWhere(
+                                  (f) => f.id == state.folderId,
+                                ),
+                                onSelected: (id) => context
+                                    .read<CreateTextNoteBloc>()
+                                    .add(FolderSelected(id)),
+                              ),
+                              if (folderState is FolderLoading)
+                                const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                            ],
+                          );
+                        },
                       ),
 
                       SizedBox(height: 16),
 
                       // Content input
                       TextField(
-                        controller: contentController,
                         minLines: 10,
                         maxLines: 10,
                         maxLength: 10_000_000,
@@ -74,6 +124,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                           context: context,
                           hintText: 'Start typing your note...',
                         ),
+                        onChanged: (v) => context
+                            .read<CreateTextNoteBloc>()
+                            .add(ContentChanged(v)),
                       ),
 
                       SizedBox(height: 20),
@@ -101,13 +154,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                             child: InverseTextButton(
                               text: 'Save Note',
                               onPressed: () {
-                                context.read<CreateNoteFromTextBloc>().add(
-                                  CreateNoteFromTextEvent(
-                                    titleController.text,
-                                    contentController.text,
-                                  ),
+                                context.read<CreateTextNoteBloc>().add(
+                                  SubmitNote(),
                                 );
-                                Navigator.pop(context);
                               },
                               backgroundColor: Theme.of(
                                 context,

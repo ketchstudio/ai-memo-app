@@ -5,5 +5,5 @@ class AuthSession {
   AuthSession({required this.accessToken, required this.expiresAt});
 }
 
-/// Supported OAuth providers in domain
+/// Supported OAuth providers in datasource
 enum AuthProviderType { google, apple }

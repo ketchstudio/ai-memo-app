@@ -1,4 +1,5 @@
 import 'package:ana_flutter/core/config/env_key.dart';
+import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/utils/env_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
@@ -25,7 +26,7 @@ class LoginScreen extends StatelessWidget {
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppBorderRadius.card,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

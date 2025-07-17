@@ -31,17 +31,24 @@ class FolderCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Icon(folder.icon, size: 24, color: folder.color),
-                  const SizedBox(width: 12),
-                  Text(
-                    folder.name,
-                    style: AppTextStyles.bodyMedium(
-                      context,
-                    ).withFontWeight(FontWeight.bold),
-                  ),
-                ],
+              SizedBox(
+                width: 120,
+                child: Row(
+                  children: [
+                    Icon(folder.icon, size: 24, color: folder.color),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        folder.name,
+                        style: AppTextStyles.bodyMedium(
+                          context,
+                        ).withFontWeight(FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 4),
               Text(

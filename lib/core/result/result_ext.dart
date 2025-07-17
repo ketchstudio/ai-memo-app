@@ -26,7 +26,6 @@ AsyncResultDart<T, AppError> runCatchingAsync<T extends Object>(
     final value = await action();
     return Success(value);
   } catch (e) {
-    print('Error in runCatchingAsync: $e');
     final appErr = ErrorMapper.map(e);
     return Failure(appErr);
   }

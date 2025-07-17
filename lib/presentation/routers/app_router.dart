@@ -1,3 +1,4 @@
+import 'package:ana_flutter/presentation/folder_management/folder_management_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import '../create_folder/create_folder_screen.dart';
@@ -68,6 +69,11 @@ class AppRouter {
           path: '/explore',
           name: 'explore',
           builder: (_, _) => const ExploreScreen(),
+        ),
+        GoRoute(
+          path: '/folder-management',
+          name: 'folderManagement',
+          builder: (_, _) => const FolderManagementScreen(),
         ),
       ],
     );

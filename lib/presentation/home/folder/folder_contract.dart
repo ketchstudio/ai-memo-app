@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../domain/models/folder.dart';
+
 class FolderUiItem {
   final String id;
   final String name;
@@ -16,48 +18,42 @@ class FolderUiItem {
   });
 }
 
-final List<FolderUiItem> folders = [
-  FolderUiItem(
-    id: '1',
-    name: 'All Notes',
-    icon: Icons.folder,
-    noteCount: 42,
-    color: const Color(0xFF36394C),
-    // dark gray
-  ),
-  FolderUiItem(
-    id: "2",
-    name: 'Work',
-    icon: Icons.work,
-    noteCount: 12,
-    color: const Color(0xFF2563EB),
-  ),
-  FolderUiItem(
-    id: "3",
-    name: 'Study',
-    icon: Icons.school,
-    noteCount: 8,
-    color: const Color(0xFF22C55E),
-  ),
-  FolderUiItem(
-    id: "4",
-    name: 'Personal',
-    icon: Icons.person,
-    noteCount: 5,
-    color: const Color(0xFFEC4899),
-  ),
-  FolderUiItem(
-    id: "5",
-    name: 'Ideas',
-    icon: Icons.lightbulb,
-    noteCount: 3,
-    color: const Color(0xFF8B5CF6),
-  ),
-  FolderUiItem(
-    id: "6",
-    name: 'Travel',
-    icon: Icons.airplanemode_active,
-    noteCount: 7,
-    color: const Color(0xFF10B981),
-  ),
-];
+// You may want a custom mapping for icons and colors:
+IconData getFolderIcon(Folder folder) {
+  // Example: assign based on name, id, or metadata
+  return Icons.folder;
+}
+
+Color getFolderColor(int index) {
+  // Example: assign color based on name hash or folder id
+  final colors = [
+    Colors.blue,
+    Colors.green,
+    Colors.orange,
+    Colors.purple,
+    Colors.red,
+    Colors.yellow,
+    Colors.teal,
+    Colors.pink,
+    Colors.cyan,
+    Colors.indigo,
+    Colors.brown,
+    Colors.amber,
+    Colors.lime,
+    Colors.deepOrange,
+  ];
+  return colors[index % colors.length];
+}
+
+// noteCount can be passed in or default to 0
+extension FolderUiMapper on Folder {
+  FolderUiItem toUiItem(int index) {
+    return FolderUiItem(
+      id: id,
+      name: name,
+      icon: getFolderIcon(this),
+      noteCount: totalNotes,
+      color: getFolderColor(index),
+    );
+  }
+}

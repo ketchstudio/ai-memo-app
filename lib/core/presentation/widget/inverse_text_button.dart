@@ -30,6 +30,7 @@ class InverseTextButton extends StatelessWidget {
     final overrideTextColor = textColor ?? contrastColor;
     return TextButton(
       style: ElevatedButton.styleFrom(
+        textStyle: textStyle?.copyWith(color: overrideTextColor),
         backgroundColor: backgroundColor,
         foregroundColor: contrastColor,
         padding: padding,
