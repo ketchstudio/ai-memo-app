@@ -90,16 +90,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(height: 8),
                       BlocBuilder<FolderBloc, FolderState>(
-                        buildWhen: (state, previous) =>
-                            state is FolderLoadSuccess ||
-                            state is FolderLoading ||
-                            state is FolderFailure,
                         builder: (context, state) {
-                          print('Folder state: $state');
-                          return state is FolderLoadSuccess
-                              ? _content(context, state)
-                              : SizedBox.shrink();
-                        }
+                          if (state is FolderLoading) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+
+                          if (state is FolderLoadSuccess && state.folders.isEmpty) {
+                            return const Center(child: Text('No folders available'));
+                          }
+
+                          return _content(context, state.folders);
+                        },
                       ),
                     ],
                   ),
@@ -112,10 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: HomeMainAction(
-                  onAddTap: () =>
-                      showNoteCreateOptionBottomSheet(context, (option) {
-                        showCreateTextNoteDialog(context);
-                      }),
+                  onAddTap: () {
+                    showNoteCreateOptionBottomSheet(context, (option) {
+                      showCreateTextNoteDialog(context);
+                    });
+                  },
                   onMindMapTap: () => context.push(AppRoute.mindMap.path),
                   onExploreTap: () => context.push(AppRoute.explore.path),
                 ),
@@ -128,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-Widget _content(BuildContext context, FolderLoadSuccess state) {
+Widget _content(BuildContext context, List<FolderUiItem> folders) {
   return SizedBox(
     width: MediaQuery.of(context).size.width,
     child: FolderListView(
@@ -137,13 +139,10 @@ Widget _content(BuildContext context, FolderLoadSuccess state) {
           id: 'all',
           name: "All Folders",
           icon: Icons.folder,
-          noteCount: state.folders.fold(
-            0,
-            (sum, folder) => sum + folder.noteCount,
-          ),
+          noteCount: folders.fold(0, (sum, folder) => sum + folder.noteCount),
           color: Theme.of(context).colorScheme.primary,
         ),
-        ...state.folders,
+        ...folders,
       ],
       onFolderSelected: (folderId) {
         context.push(AppRoute.folderManagement.path);

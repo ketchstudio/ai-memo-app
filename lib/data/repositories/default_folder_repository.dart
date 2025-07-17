@@ -20,13 +20,10 @@ class DefaultFolderRepository implements FolderRepository {
   AsyncResultDart<List<Folder>, AppError> getAll() =>
       runCatchingAsync(() async {
         final localFolders = await _local.getAll();
-        print('Fetching folders from repository: ${localFolders.length} found');
         if (localFolders.isNotEmpty) {
           return localFolders;
         } else {
-
           final remoteFolders = await _remote.getAll();
-          print('Fetching remoteFolders from repository: ${remoteFolders.length} found');
           await _local.setAll(remoteFolders);
           return remoteFolders;
         }

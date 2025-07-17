@@ -6,6 +6,8 @@ import 'package:ana_flutter/presentation/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'core/presentation/snackbar_manager.dart';
+
 class AnaApp extends StatelessWidget {
   AnaApp({super.key});
 
@@ -28,8 +30,7 @@ class AnaApp extends StatelessWidget {
           return BlocProvider<FolderBloc>(
             // key ensures a fresh FolderBloc after login/logout
             key: ValueKey(authState is AuthAuthenticated),
-            create: (_) =>
-            authState is AuthAuthenticated
+            create: (_) => authState is AuthAuthenticated
                 ? FolderBloc()
                 : FolderBloc.empty(), // or a dummy/inactive bloc if needed
             child: BlocBuilder<ThemeCubit, ThemeMode>(
@@ -42,6 +43,7 @@ class AnaApp extends StatelessWidget {
                   routerConfig: AppRouter(
                     isAuth: authState is AuthAuthenticated,
                   ).router,
+                  scaffoldMessengerKey: SnackbarManager.messengerKey,
                 );
               },
             ),

@@ -26,10 +26,12 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
     final response = await client
         .from(SupabaseDatabaseTable.folders)
         .insert({'name': name})
+        .select()
+        .single()
         .onError(
           (e, stacktrace) => throw NetworkError('Failed to create folder: $e'),
         );
-    return Folder.fromMap(response.data as Map<String, dynamic>);
+    return Folder.fromMap(response);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.dart';
+import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
 import 'package:ana_flutter/presentation/app/bloc/folder/folder_bloc.dart';
 import 'package:ana_flutter/presentation/app/bloc/folder/folder_state.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/bloc/create_note_from_text_bloc.dart';
@@ -20,7 +21,16 @@ void showCreateTextNoteDialog(BuildContext context) {
     builder: (context) {
       return BlocProvider(
         create: (context) => CreateTextNoteBloc(),
-        child: BlocBuilder<CreateTextNoteBloc, CreateTextNoteState>(
+        child: BlocConsumer<CreateTextNoteBloc, CreateTextNoteState>(
+          listener: (context, state) {
+            if (state.status == CreateTextNoteStatus.success) {
+              Navigator.popUntil(context, (route) => route.isFirst);
+              SnackbarManager.show(
+                message: 'Note created successfully!',
+                type: SnackbarType.success,
+              );
+            }
+          },
           builder: (context, state) {
             return Center(
               child: Container(
@@ -54,6 +64,19 @@ void showCreateTextNoteDialog(BuildContext context) {
                       ),
                       SizedBox(height: 16),
 
+                      if (state.errorMessage != null &&
+                          state.errorMessage!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            state.errorMessage ?? '',
+                            style: AppTextStyles.bodyMedium(context)
+                                .copyWith(color: Colors.red)
+                                .withFontWeight(FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+
                       // Title input
                       TextField(
                         decoration: appInputDecoration(
@@ -70,23 +93,23 @@ void showCreateTextNoteDialog(BuildContext context) {
                       // Folder selector
                       BlocBuilder<FolderBloc, FolderState>(
                         builder: (context, folderState) {
-                          if (folderState is FolderLoading) {
-                            return Center(child: CircularProgressIndicator());
-                          } else if (folderState is FolderFailure) {
-                            return Center(child: Text(folderState.message));
-                          } else if (folderState is FolderLoadSuccess) {
-                            return FolderSelector(
-                              folders: folderState.folders,
-                              selectedIndex: folderState.folders.indexWhere(
-                                (f) => f.id == state.folderId,
+                          return Stack(
+                            children: [
+                              FolderSelector(
+                                folders: folderState.folders,
+                                selectedIndex: folderState.folders.indexWhere(
+                                  (f) => f.id == state.folderId,
+                                ),
+                                onSelected: (id) => context
+                                    .read<CreateTextNoteBloc>()
+                                    .add(FolderSelected(id)),
                               ),
-                              onSelected: (id) => context
-                                  .read<CreateTextNoteBloc>()
-                                  .add(FolderSelected(id)),
-                            );
-                          } else {
-                            return SizedBox.shrink();
-                          }
+                              if (folderState is FolderLoading)
+                                const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                            ],
+                          );
                         },
                       ),
 
@@ -134,7 +157,6 @@ void showCreateTextNoteDialog(BuildContext context) {
                                 context.read<CreateTextNoteBloc>().add(
                                   SubmitNote(),
                                 );
-                                Navigator.pop(context);
                               },
                               backgroundColor: Theme.of(
                                 context,

@@ -28,15 +28,18 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
   }
 
   void _onListenFolders(ListenFolders event, Emitter<FolderState> emit) async {
-    emit(FolderLoading());
+    emit(FolderLoading(state.folders));
     await emit.forEach(
       getIt<GetFoldersStreamUseCase>().call(),
       onData: (folders) {
         return FolderLoadSuccess(
-          folders.mapIndexed((index, item) => item.toUiItem(index)).toList(),
+          folders.reversed
+              .mapIndexed((index, item) => item.toUiItem(index))
+              .toList(),
         );
       },
-      onError: (error, stackTrace) => FolderFailure(error.toString()),
+      onError: (error, stackTrace) =>
+          FolderFailure(message: error.toString(), folders: state.folders),
     );
   }
 
@@ -44,37 +47,53 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
     CreateFolder event,
     Emitter<FolderState> emit,
   ) async {
-    emit(FolderLoading());
+    emit(FolderLoading(state.folders));
     final result = await getIt<CreateFolderUseCase>().call(event.name);
-    result.fold((_) {}, (failure) => emit(FolderFailure(failure.message)));
+    result.fold(
+      (_) => emit(CreateFolderLoadSuccess(state.folders)),
+      (failure) =>
+          emit(FolderFailure(message: failure.message, folders: state.folders)),
+    );
   }
 
   Future<void> _onEditFolder(
     EditFolder event,
     Emitter<FolderState> emit,
   ) async {
-    emit(FolderLoading());
+    emit(FolderLoading(state.folders));
     final result = await getIt<EditFolderUseCase>().call(
       event.id,
       event.newName,
     );
-    result.fold((_) {}, (failure) => emit(FolderFailure(failure.message)));
+    result.fold(
+      (_) {
+        emit(EditFolderLoadSuccess(state.folders));
+      },
+      (failure) =>
+          emit(FolderFailure(message: failure.message, folders: state.folders)),
+    );
   }
 
   Future<void> _onDeleteFolder(
     DeleteFolder event,
     Emitter<FolderState> emit,
   ) async {
-    emit(FolderLoading());
+    emit(FolderLoading(state.folders));
     final result = await getIt<DeleteFolderUseCase>().call(event.id);
-    result.fold((_) {}, (failure) => emit(FolderFailure(failure.message)));
+    result.fold(
+      (_) {
+        emit(DeleteFolderLoadSuccess(state.folders));
+      },
+      (failure) =>
+          emit(FolderFailure(message: failure.message, folders: state.folders)),
+    );
   }
 
   Future<void> _onRefreshFolders(
     RefreshFolders event,
     Emitter<FolderState> emit,
   ) async {
-    emit(FolderLoading());
+    emit(FolderLoading(state.folders));
     getIt<RefreshFoldersUseCase>().call();
   }
 
