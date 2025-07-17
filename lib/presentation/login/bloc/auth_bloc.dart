@@ -93,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<_AuthStateChanged>(_onStateChanged);
 
-    // Subscribe to domain session changes
+    // Subscribe to datasource session changes
     _sessionSubscription = _authRepository.sessionStream.listen(
       (session) => add(_AuthStateChanged(session)),
     );

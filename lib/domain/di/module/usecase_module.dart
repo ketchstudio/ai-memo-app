@@ -7,8 +7,11 @@ import '../../repositories/memo_repository.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
-    getIt.registerSingleton<InsertMemoUseCase>(
-      InsertMemoUseCase(getIt<NoteRepository>()),
+    getIt.registerSingleton<CreateNoteWithFolderUpdateUseCase>(
+      CreateNoteWithFolderUpdateUseCase(
+        getIt<NoteRepository>(),
+        getIt<FolderRepository>(),
+      ),
     );
 
     getIt.registerSingleton<CreateFolderUseCase>(
@@ -25,6 +28,14 @@ class UseCaseModule {
 
     getIt.registerSingleton<DeleteFolderUseCase>(
       DeleteFolderUseCase(getIt<FolderRepository>()),
+    );
+
+    getIt.registerSingleton<RefreshFoldersUseCase>(
+      RefreshFoldersUseCase(getIt<FolderRepository>()),
+    );
+
+    getIt.registerSingleton<GetAllFoldersUseCase>(
+      GetAllFoldersUseCase(getIt<FolderRepository>()),
     );
   }
 }

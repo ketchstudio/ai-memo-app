@@ -1,8 +1,19 @@
+import 'package:ana_flutter/core/result/result_ext.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../models/app_error.dart';
 import '../../models/folder.dart';
 import '../../repositories/folder_repository.dart';
+
+//Init Folders
+class GetAllFoldersUseCase {
+  final FolderRepository repository;
+
+  GetAllFoldersUseCase(this.repository);
+
+  AsyncResultDart<Nothing, AppError> call() =>
+      repository.getAll().map((_) => Nothing.instance);
+}
 
 // Get Folders as Stream (realtime)
 class GetFoldersStreamUseCase {
@@ -10,9 +21,7 @@ class GetFoldersStreamUseCase {
 
   GetFoldersStreamUseCase(this.repository);
 
-  Stream<ResultDart<List<Folder>, AppError>> call() {
-    return repository.observe();
-  }
+  Stream<List<Folder>> call() => repository.observe();
 }
 
 // Create Folder
@@ -21,7 +30,8 @@ class CreateFolderUseCase {
 
   CreateFolderUseCase(this.repository);
 
-  AsyncResultDart<Folder, AppError> call(String name) => repository.add(name);
+  AsyncResultDart<Folder, AppError> call(String name) =>
+      repository.create(name);
 }
 
 // Edit Folder
@@ -31,7 +41,7 @@ class EditFolderUseCase {
   EditFolderUseCase(this.repository);
 
   AsyncResultDart<void, AppError> call(String id, String newName) =>
-      repository.edit(id, newName);
+      repository.update(id, newName);
 }
 
 // Remove Folder
@@ -40,5 +50,14 @@ class DeleteFolderUseCase {
 
   DeleteFolderUseCase(this.repository);
 
-  AsyncResultDart<void, AppError> call(String id) => repository.deleteById(id);
+  AsyncResultDart<void, AppError> call(String id) => repository.delete(id);
+}
+
+// Refresh Folders
+class RefreshFoldersUseCase {
+  final FolderRepository repository;
+
+  RefreshFoldersUseCase(this.repository);
+
+  AsyncResultDart<void, AppError> call() => repository.refresh();
 }

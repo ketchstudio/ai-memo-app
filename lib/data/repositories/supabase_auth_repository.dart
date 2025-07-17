@@ -1,6 +1,6 @@
 import '../../domain/models/auth_session.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../remote/domain/auth_remote_datasource.dart';
+import '../datasource/auth_remote_datasource.dart';
 
 class SupabaseAuthRepository implements AuthRepository {
   final AuthRemoteDataSource _remote;

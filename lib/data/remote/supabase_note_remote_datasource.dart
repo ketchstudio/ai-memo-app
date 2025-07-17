@@ -3,8 +3,8 @@ import 'package:ana_flutter/domain/models/app_error.dart';
 import 'package:ana_flutter/domain/models/create_note_request.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../datasource/note_remote_datasource.dart';
 import 'constant/supabase_database.dart';
-import 'domain/note_remote_datasource.dart';
 
 class SupabaseNoteRemoteDataSource implements NoteRemoteDataSource {
   final SupabaseClient client;

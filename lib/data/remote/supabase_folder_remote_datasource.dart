@@ -1,40 +1,28 @@
+import 'package:ana_flutter/data/datasource/folder_datasource.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 
 import '../../domain/models/app_error.dart';
 import '../../domain/models/folder.dart';
 import 'constant/supabase_database.dart';
-import 'domain/folder_remote_datasource.dart';
 
-class SupabaseFolderDataSource extends FolderRemoteDataSource {
+class SupabaseRemoteFolderDataSource extends FolderDataSource {
   final SupabaseClient client;
 
-  SupabaseFolderDataSource(this.client);
+  SupabaseRemoteFolderDataSource(this.client);
 
-  Stream<List<Folder>> observe() async* {
-    await for (final event
-        in client
-            .from(SupabaseDatabaseTable.foldersWithNoteCount)
-            .stream(primaryKey: ['id'])
-            .distinct()) {
-      final folders = event.map((json) => Folder.fromMap(json)).toList();
-
-      if (folders.isEmpty) {
-        await _ensureDefaultFolders();
-        // Next iteration will pick up inserted folders
-      }
-      yield folders;
-    }
-  }
-
-  Future<void> _ensureDefaultFolders() async {
-    add('Work');
-    add('Personal');
-    add('Study');
-    add('Idea');
+  @override
+  Future<List<Folder>> getAll() async {
+    final response = await client
+        .from(SupabaseDatabaseTable.foldersWithNoteCount)
+        .select()
+        .onError(
+          (e, stacktrace) => throw NetworkError('Failed to fetch folders: $e'),
+        );
+    return response.map((json) => Folder.fromMap(json)).toList();
   }
 
   @override
-  Future<Folder> add(String name) async {
+  Future<Folder> create(String name) async {
     final response = await client
         .from(SupabaseDatabaseTable.folders)
         .insert({'name': name})
@@ -45,9 +33,9 @@ class SupabaseFolderDataSource extends FolderRemoteDataSource {
   }
 
   @override
-  Future<void> edit(String id, String newName) async {
+  Future<void> update(String id, String newName) async {
     return client
-        .from('folders')
+        .from(SupabaseDatabaseTable.folders)
         .update({'name': newName})
         .eq('id', id)
         .onError(
@@ -56,9 +44,9 @@ class SupabaseFolderDataSource extends FolderRemoteDataSource {
   }
 
   @override
-  Future<void> deleteById(String id) async {
+  Future<void> delete(String id) async {
     return client
-        .from('folders')
+        .from(SupabaseDatabaseTable.folders)
         .delete()
         .eq('id', id)
         .onError(

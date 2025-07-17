@@ -1,3 +1,4 @@
+import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../domain/models/folder.dart';
@@ -12,7 +13,7 @@ class FolderInitial extends FolderState {}
 class FolderLoading extends FolderState {}
 
 class FolderLoadSuccess extends FolderState {
-  final List<Folder> folders;
+  final List<FolderUiItem> folders;
 
   FolderLoadSuccess(this.folders);
 

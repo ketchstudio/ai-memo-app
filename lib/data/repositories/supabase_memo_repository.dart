@@ -4,7 +4,7 @@ import 'package:result_dart/result_dart.dart';
 import '../../core/result/result_ext.dart';
 import '../../domain/models/create_note_request.dart';
 import '../../domain/repositories/memo_repository.dart';
-import '../remote/domain/note_remote_datasource.dart';
+import '../datasource/note_remote_datasource.dart';
 
 class SupabaseNoteRepository implements NoteRepository {
   final NoteRemoteDataSource remoteDataSource;

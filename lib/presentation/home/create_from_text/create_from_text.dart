@@ -1,5 +1,8 @@
 import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.dart';
+import 'package:ana_flutter/presentation/app/bloc/folder/folder_bloc.dart';
+import 'package:ana_flutter/presentation/app/bloc/folder/folder_state.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/bloc/create_note_from_text_bloc.dart';
+import 'package:ana_flutter/presentation/home/create_from_text/widget/folder_selector.dart';
 import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +18,9 @@ void showCreateTextNoteDialog(BuildContext context) {
     backgroundColor: Colors.transparent,
     context: context,
     builder: (context) {
-      final titleController = TextEditingController();
-      final contentController = TextEditingController();
       return BlocProvider(
-        create: (context) => CreateNoteFromTextBloc(),
-        child: BlocBuilder<CreateNoteFromTextBloc, CreateNoteFromTextState>(
+        create: (context) => CreateTextNoteBloc(),
+        child: BlocBuilder<CreateTextNoteBloc, CreateTextNoteState>(
           builder: (context, state) {
             return Center(
               child: Container(
@@ -55,18 +56,44 @@ void showCreateTextNoteDialog(BuildContext context) {
 
                       // Title input
                       TextField(
-                        controller: titleController,
                         decoration: appInputDecoration(
                           context: context,
                           hintText: 'Note title...',
                         ),
+                        onChanged: (v) => context
+                            .read<CreateTextNoteBloc>()
+                            .add(TitleChanged(v)),
+                      ),
+
+                      SizedBox(height: 16),
+
+                      // Folder selector
+                      BlocBuilder<FolderBloc, FolderState>(
+                        builder: (context, folderState) {
+                          if (folderState is FolderLoading) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (folderState is FolderFailure) {
+                            return Center(child: Text(folderState.message));
+                          } else if (folderState is FolderLoadSuccess) {
+                            return FolderSelector(
+                              folders: folderState.folders,
+                              selectedIndex: folderState.folders.indexWhere(
+                                (f) => f.id == state.folderId,
+                              ),
+                              onSelected: (id) => context
+                                  .read<CreateTextNoteBloc>()
+                                  .add(FolderSelected(id)),
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
                       ),
 
                       SizedBox(height: 16),
 
                       // Content input
                       TextField(
-                        controller: contentController,
                         minLines: 10,
                         maxLines: 10,
                         maxLength: 10_000_000,
@@ -74,6 +101,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                           context: context,
                           hintText: 'Start typing your note...',
                         ),
+                        onChanged: (v) => context
+                            .read<CreateTextNoteBloc>()
+                            .add(ContentChanged(v)),
                       ),
 
                       SizedBox(height: 20),
@@ -101,11 +131,8 @@ void showCreateTextNoteDialog(BuildContext context) {
                             child: InverseTextButton(
                               text: 'Save Note',
                               onPressed: () {
-                                context.read<CreateNoteFromTextBloc>().add(
-                                  CreateNoteFromTextEvent(
-                                    titleController.text,
-                                    contentController.text,
-                                  ),
+                                context.read<CreateTextNoteBloc>().add(
+                                  SubmitNote(),
                                 );
                                 Navigator.pop(context);
                               },

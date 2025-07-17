@@ -1,33 +1,89 @@
-import 'package:ana_flutter/di/service_locator.dart';
+// create_text_note_bloc.dart
 import 'package:ana_flutter/domain/models/create_note_request.dart';
 import 'package:ana_flutter/domain/usecase/memo/create_note_use_case.dart';
-import 'package:ana_flutter/presentation/home/create_from_text/bloc/create_note_from_text_state.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../di/service_locator.dart';
 import 'create_note_from_text_event.dart';
+import 'create_note_from_text_state.dart';
 
-class CreateNoteFromTextBloc
-    extends Bloc<CreateNoteFromTextEvent, CreateNoteFromTextState> {
-  CreateNoteFromTextBloc() : super(CreateNoteFromTextInitial()) {
-    on<CreateNoteFromTextEvent>(_onCreateNote);
+class CreateTextNoteBloc
+    extends Bloc<CreateTextNoteEvent, CreateTextNoteState> {
+  CreateTextNoteBloc() : super(const CreateTextNoteState()) {
+    on<TitleChanged>(_onTitleChanged);
+    on<ContentChanged>(_onContentChanged);
+    on<FolderSelected>(_onFolderSelected);
+    on<SubmitNote>(_onSubmit);
   }
 
-  Future<void> _onCreateNote(
-    CreateNoteFromTextEvent event,
-    Emitter<CreateNoteFromTextState> emit,
-  ) async {
-    emit(CreateNoteFromTextLoading());
-    final result = await getIt<InsertMemoUseCase>().call(
-      params: CreateNoteRequest(
-        title: event.title,
+  void _onTitleChanged(TitleChanged event, Emitter<CreateTextNoteState> emit) {
+    emit(
+      state.copyWith(title: event.title, status: CreateTextNoteStatus.initial),
+    );
+  }
+
+  void _onContentChanged(
+    ContentChanged event,
+    Emitter<CreateTextNoteState> emit,
+  ) {
+    emit(
+      state.copyWith(
         content: event.content,
-        folderId:
-            '0a1987c0-1afb-4234-a986-3c067247ee7c', // TODO: Replace with actual folder ID
+        status: CreateTextNoteStatus.initial,
       ),
     );
+  }
+
+  void _onFolderSelected(
+    FolderSelected event,
+    Emitter<CreateTextNoteState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        folderId: event.folderId,
+        status: CreateTextNoteStatus.initial,
+      ),
+    );
+  }
+
+  Future<void> _onSubmit(
+    SubmitNote event,
+    Emitter<CreateTextNoteState> emit,
+  ) async {
+    if (state.title.isEmpty ||
+        state.content.isEmpty ||
+        state.folderId.isEmpty) {
+      emit(
+        state.copyWith(
+          status: CreateTextNoteStatus.failure,
+          errorMessage: 'Please fill all fields.',
+        ),
+      );
+      return;
+    }
+
+    emit(state.copyWith(status: CreateTextNoteStatus.submitting));
+
+    final result = await getIt<CreateNoteWithFolderUpdateUseCase>().call(
+      CreateNoteRequest(
+        title: state.title,
+        content: state.content,
+        folderId: state.folderId,
+      ),
+    );
+
     result.fold(
-      (_) => emit(CreateNoteFromTextSuccess()),
-      (e) => emit(CreateNoteFromTextFailure(e.message)),
+      (memo) {
+        emit(state.copyWith(status: CreateTextNoteStatus.success));
+      },
+      (error) {
+        emit(
+          state.copyWith(
+            status: CreateTextNoteStatus.failure,
+            errorMessage: error.message,
+          ),
+        );
+      },
     );
   }
 }

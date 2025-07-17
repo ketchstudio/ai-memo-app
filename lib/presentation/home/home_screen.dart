@@ -1,4 +1,6 @@
+import 'package:ana_flutter/presentation/app/bloc/folder/folder_event.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/create_from_text.dart';
+import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:ana_flutter/presentation/home/home_main_action.dart';
 import 'package:ana_flutter/presentation/home/search_bar.dart';
 import 'package:ana_flutter/presentation/login/bloc/auth_bloc.dart';
@@ -12,8 +14,7 @@ import '../app/bloc/folder/folder_bloc.dart';
 import '../app/bloc/folder/folder_state.dart';
 import '../app/bloc/theme_cubit.dart';
 import 'action/note_create_option_bottomsheet.dart';
-import 'folder/folder_card.dart';
-import 'folder/folder_contract.dart';
+import 'folder/folder_list_view.dart';
 import 'home_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,82 +37,88 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: Stack(
+          fit: StackFit.expand,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Placeholder for the main content area
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SearchBarWidget(
-                    controller: TextEditingController(),
-                    onChanged: (query) {
-                      // Handle search action
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Folders',
-                    style: AppTextStyles.titleLarge(
-                      context,
-                    ).withFontWeight(FontWeight.bold),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: BlocBuilder<FolderBloc, FolderState>(
-                        builder: (context, state) {
-                          if (state is FolderLoading) {
-                            return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          if (state is FolderFailure) {
-                            return Center(child: Text(state.message));
-                          }
-                          if (state is FolderLoadSuccess) {
-                            final folderUiItems = state.folders
-                                .map((e) => e.toUiItem())
-                                .toList();
-                            return Row(
-                              children: folderUiItems
-                                  .map(
-                                    (item) => FolderCard(
-                                      folder: item,
-                                      onFolderSelected: (_) {},
-                                    ),
-                                  )
-                                  .toList(),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
+            Positioned.fill(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<FolderBloc>().add(RefreshFolders());
+                  // Wait for refresh to complete
+                  await context.read<FolderBloc>().stream.firstWhere(
+                    (state) => state is! FolderLoading,
+                  );
+                },
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Placeholder for the main content area
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: SearchBarWidget(
+                          controller: TextEditingController(),
+                          onChanged: (query) {
+                            // Handle search action
+                          },
+                        ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Folders',
+                              style: AppTextStyles.titleLarge(
+                                context,
+                              ).withFontWeight(FontWeight.bold),
+                            ),
+                            TextButton(
+                              child: const Text(
+                                'Manage Folders',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              onPressed: () =>
+                                  context.push(AppRoute.folderManagement.path),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      BlocBuilder<FolderBloc, FolderState>(
+                        buildWhen: (state, previous) =>
+                            state is FolderLoadSuccess ||
+                            state is FolderLoading ||
+                            state is FolderFailure,
+                        builder: (context, state) {
+                          print('Folder state: $state');
+                          return state is FolderLoadSuccess
+                              ? _content(context, state)
+                              : SizedBox.shrink();
+                        }
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
 
             Align(
               alignment: Alignment.bottomCenter,
-              child: HomeMainAction(
-                onAddTap: () =>
-                    showNoteCreateOptionBottomSheet(context, (option) {
-                      showCreateTextNoteDialog(context);
-                    }),
-                onMindMapTap: () => context.push(AppRoute.mindMap.path),
-                onExploreTap: () => context.push(AppRoute.explore.path),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: HomeMainAction(
+                  onAddTap: () =>
+                      showNoteCreateOptionBottomSheet(context, (option) {
+                        showCreateTextNoteDialog(context);
+                      }),
+                  onMindMapTap: () => context.push(AppRoute.mindMap.path),
+                  onExploreTap: () => context.push(AppRoute.explore.path),
+                ),
               ),
             ),
           ],
@@ -119,4 +126,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Widget _content(BuildContext context, FolderLoadSuccess state) {
+  return SizedBox(
+    width: MediaQuery.of(context).size.width,
+    child: FolderListView(
+      folders: [
+        FolderUiItem(
+          id: 'all',
+          name: "All Folders",
+          icon: Icons.folder,
+          noteCount: state.folders.fold(
+            0,
+            (sum, folder) => sum + folder.noteCount,
+          ),
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        ...state.folders,
+      ],
+      onFolderSelected: (folderId) {
+        context.push(AppRoute.folderManagement.path);
+      },
+    ),
+  );
 }

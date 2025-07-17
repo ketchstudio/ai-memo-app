@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/data/logger/supabase_http_logger.dart';
 import 'di/service_locator.dart';
 
 Future<void> main() async {
@@ -22,6 +23,7 @@ Future<void> main() async {
     authOptions: FlutterAuthClientOptions(
       authFlowType: AuthFlowType.pkce, // Use PKCE for secure authentication
     ),
+    httpClient: SupabaseHttpClient(),
   );
   await ServiceLocator.configureDependencies();
   runApp(AnaApp());

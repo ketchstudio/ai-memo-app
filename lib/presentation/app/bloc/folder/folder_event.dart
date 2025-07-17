@@ -34,3 +34,8 @@ class DeleteFolder extends FolderEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class RefreshFolders extends FolderEvent {
+  @override
+  List<Object?> get props => [];
+}

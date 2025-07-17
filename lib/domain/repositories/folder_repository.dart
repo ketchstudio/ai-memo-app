@@ -5,11 +5,19 @@ import 'package:result_dart/result_dart.dart';
 import '../models/folder.dart';
 
 abstract class FolderRepository {
-  Stream<ResultDart<List<Folder>, AppError>> observe();
+  Stream<List<Folder>> observe();
 
-  AsyncResultDart<Folder, AppError> add(String name);
+  AsyncResultDart<List<Folder>, AppError> getAll();
 
-  AsyncResultDart<Nothing, AppError> edit(String id, String newName);
+  AsyncResultDart<Folder, AppError> create(String name);
 
-  AsyncResultDart<Nothing, AppError> deleteById(String id);
+  AsyncResultDart<Nothing, AppError> update(String id, String newName);
+
+  AsyncResultDart<Nothing, AppError> delete(String id);
+
+  AsyncResultDart<Nothing, AppError> refresh();
+
+  AsyncResultDart<Nothing, AppError> incrementNoteCount(String folderId);
+
+  AsyncResultDart<Nothing, AppError> decrementNoteCount(String folderId);
 }

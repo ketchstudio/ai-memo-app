@@ -31,4 +31,18 @@ class Folder extends Equatable {
 
   @override
   List<Object?> get props => [id, name, totalNotes, createdAt];
+
+  Folder copyWith({
+    String? id,
+    String? name,
+    int? totalNotes,
+    DateTime? createdAt,
+  }) {
+    return Folder(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      totalNotes: totalNotes ?? this.totalNotes,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
