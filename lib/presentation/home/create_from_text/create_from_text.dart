@@ -34,142 +34,161 @@ void showCreateTextNoteDialog(BuildContext context) {
           builder: (context, state) {
             return Center(
               child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 margin: EdgeInsets.all(16),
-                padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: AppBorderRadius.card,
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Header
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Create Text Note',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Icon(Icons.close),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-
-                      if (state.errorMessage != null &&
-                          state.errorMessage!.isNotEmpty)
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Header
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            state.errorMessage ?? '',
-                            style: AppTextStyles.bodyMedium(context)
-                                .copyWith(color: Colors.red)
-                                .withFontWeight(FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-
-                      // Title input
-                      TextField(
-                        decoration: appInputDecoration(
-                          context: context,
-                          hintText: 'Note title...',
-                        ),
-                        onChanged: (v) => context
-                            .read<CreateTextNoteBloc>()
-                            .add(TitleChanged(v)),
-                      ),
-
-                      SizedBox(height: 16),
-
-                      // Folder selector
-                      BlocBuilder<FolderBloc, FolderState>(
-                        builder: (context, folderState) {
-                          return Stack(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
                             children: [
-                              FolderSelector(
-                                folders: folderState.folders,
-                                selectedIndex: folderState.folders.indexWhere(
-                                  (f) => f.id == state.folderId,
+                              Expanded(
+                                child: Text(
+                                  'Create Text Note',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                onSelected: (id) => context
-                                    .read<CreateTextNoteBloc>()
-                                    .add(FolderSelected(id)),
                               ),
-                              if (folderState is FolderLoading)
-                                const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                              GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: Icon(Icons.close),
+                              ),
                             ],
-                          );
-                        },
-                      ),
-
-                      SizedBox(height: 16),
-
-                      // Content input
-                      TextField(
-                        minLines: 10,
-                        maxLines: 10,
-                        maxLength: 10_000_000,
-                        decoration: appInputDecoration(
-                          context: context,
-                          hintText: 'Start typing your note...',
+                          ),
                         ),
-                        onChanged: (v) => context
-                            .read<CreateTextNoteBloc>()
-                            .add(ContentChanged(v)),
-                      ),
+                        SizedBox(height: 16),
 
-                      SizedBox(height: 20),
-
-                      // Action buttons
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InverseTextButton(
-                              text: 'Cancel',
-                              onPressed: () => Navigator.pop(context),
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.1),
-                              textStyle: AppTextStyles.bodyMedium(
-                                context,
-                              ).withFontWeight(FontWeight.bold),
-                              textColor: Theme.of(
-                                context,
-                              ).colorScheme.onSurface,
+                        if (state.errorMessage != null &&
+                            state.errorMessage!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              state.errorMessage ?? '',
+                              style: AppTextStyles.bodyMedium(context)
+                                  .copyWith(color: Colors.red)
+                                  .withFontWeight(FontWeight.bold),
+                              textAlign: TextAlign.left,
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: InverseTextButton(
-                              text: 'Save Note',
-                              onPressed: () {
-                                context.read<CreateTextNoteBloc>().add(
-                                  SubmitNote(),
-                                );
-                              },
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.primary,
-                              textStyle: AppTextStyles.bodyMedium(
-                                context,
-                              ).withFontWeight(FontWeight.bold),
+
+                        // Title input
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: TextField(
+                            decoration: appInputDecoration(
+                              context: context,
+                              hintText: 'Note title...',
                             ),
+                            onChanged: (v) => context
+                                .read<CreateTextNoteBloc>()
+                                .add(TitleChanged(v)),
                           ),
-                        ],
+                        ),
+
+                        SizedBox(height: 16),
+
+                        // Folder selector
+                        BlocBuilder<FolderBloc, FolderState>(
+                          builder: (context, folderState) {
+                            return Stack(
+                              children: [
+                                FolderSelector(
+                                  folders: folderState.folders,
+                                  selectedIndex: folderState.folders.indexWhere(
+                                    (f) => f.id == state.folderId,
+                                  ),
+                                  onSelected: (id) => context
+                                      .read<CreateTextNoteBloc>()
+                                      .add(FolderSelected(id)),
+                                ),
+                                if (folderState is FolderLoading)
+                                  const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+
+                        SizedBox(height: 16),
+
+                        // Content input
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: TextField(
+                            minLines: 10,
+                            maxLines: 10,
+                            maxLength: 10_000_000,
+                            decoration: appInputDecoration(
+                              context: context,
+                              hintText: 'Start typing your note...',
+                            ),
+                            onChanged: (v) => context
+                                .read<CreateTextNoteBloc>()
+                                .add(ContentChanged(v)),
+                          ),
+                        ),
+
+                        SizedBox(height: 20),
+
+                        // Action buttons
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InverseTextButton(
+                                  text: 'Cancel',
+                                  onPressed: () => Navigator.pop(context),
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.1),
+                                  textStyle: AppTextStyles.bodyMedium(
+                                    context,
+                                  ).withFontWeight(FontWeight.bold),
+                                  textColor: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Expanded(
+                                child: InverseTextButton(
+                                  text: 'Save Note',
+                                  onPressed: () {
+                                    context.read<CreateTextNoteBloc>().add(
+                                      SubmitNote(),
+                                    );
+                                  },
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
+                                  textStyle: AppTextStyles.bodyMedium(
+                                    context,
+                                  ).withFontWeight(FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (state.status == CreateTextNoteStatus.submitting)
+                      const Positioned.fill(
+                        child: Center(child: CircularProgressIndicator()),
                       ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             );

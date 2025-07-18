@@ -8,10 +8,7 @@ InputDecoration appInputDecoration({
   Widget? suffixIcon,
   bool filled = false,
   double borderRadius = 16,
-  EdgeInsets contentPadding = const EdgeInsets.symmetric(
-    horizontal: 20,
-    vertical: 16,
-  ),
+  EdgeInsets contentPadding = const EdgeInsets.all(16),
 }) {
   final theme = Theme.of(context);
 

@@ -97,8 +97,16 @@ class FolderManagementScreen extends StatelessWidget {
                       }
                     },
                     onDelete: () {
-                      // Handle delete action
-                      context.read<FolderBloc>().add(DeleteFolder(folder.id));
+                      _showConfirmDeleteFolderDialog(
+                        context: context,
+                        folderName: folder.name,
+                      ).then((confirmed) {
+                        if (confirmed == true) {
+                          context.read<FolderBloc>().add(
+                            DeleteFolder(folder.id),
+                          );
+                        }
+                      });
                     },
                   );
                 },
@@ -128,6 +136,7 @@ Future<String?> showFolderNameDialog({
     builder: (ctx) {
       const horizontalInset = 16.0;
       return AlertDialog(
+        actionsAlignment: MainAxisAlignment.center,
         insetPadding: EdgeInsets.symmetric(horizontal: horizontalInset),
         shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.card),
         title: Text(title, style: AppTextStyles.titleMedium(context)),
@@ -176,13 +185,57 @@ Future<String?> showFolderNameDialog({
   );
 }
 
+Future<bool?> _showConfirmDeleteFolderDialog({
+  required BuildContext context,
+  required String folderName,
+}) {
+  final theme = Theme.of(context);
+  const horizontalInset = 16.0;
+  return showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => AlertDialog(
+      actionsAlignment: MainAxisAlignment.center,
+      insetPadding: EdgeInsets.symmetric(horizontal: horizontalInset),
+      shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.card),
+      title: Text(
+        'Delete Folder?',
+        style: theme.textTheme.titleLarge,
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        'Are you sure you want to permanently delete\n“$folderName”?',
+        style: theme.textTheme.bodyMedium,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        InverseTextButton(
+          text: 'Cancel',
+          onPressed: () => Navigator.of(context).pop(null),
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.onSurface.withOpacity(0.1),
+          textStyle: AppTextStyles.bodyMedium(
+            context,
+          ).withFontWeight(FontWeight.bold),
+          textColor: Theme.of(context).colorScheme.onSurface,
+        ),
+        InverseTextButton(
+          text: 'Delete',
+          backgroundColor: Theme.of(context).colorScheme.error,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
+    ),
+  );
+}
+
 class _FolderCard extends StatelessWidget {
   final FolderUiItem folder;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const _FolderCard({
-    super.key,
     required this.folder,
     required this.onEdit,
     required this.onDelete,

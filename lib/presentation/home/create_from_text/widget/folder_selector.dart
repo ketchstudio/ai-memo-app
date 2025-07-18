@@ -21,6 +21,7 @@ class FolderSelector extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: folders.length,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final bool isSelected = index == selectedIndex;

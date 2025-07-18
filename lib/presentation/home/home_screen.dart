@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             TextButton(
                               child: const Text(
-                                'Manage Folders',
+                                'Manage',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.blue,
@@ -92,11 +92,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       BlocBuilder<FolderBloc, FolderState>(
                         builder: (context, state) {
                           if (state is FolderLoading) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
                           }
 
-                          if (state is FolderLoadSuccess && state.folders.isEmpty) {
-                            return const Center(child: Text('No folders available'));
+                          if (state is FolderLoadSuccess &&
+                              state.folders.isEmpty) {
+                            return const Center(
+                              child: Text('No folders available'),
+                            );
                           }
 
                           return _content(context, state.folders);
@@ -144,9 +149,7 @@ Widget _content(BuildContext context, List<FolderUiItem> folders) {
         ),
         ...folders,
       ],
-      onFolderSelected: (folderId) {
-        context.push(AppRoute.folderManagement.path);
-      },
+      onFolderSelected: (folderId) {},
     ),
   );
 }
