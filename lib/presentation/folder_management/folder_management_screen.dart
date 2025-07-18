@@ -2,6 +2,7 @@ import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.da
 import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
 import 'package:ana_flutter/core/presentation/widget/inverse_text_button.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
+import 'package:ana_flutter/presentation/theme/app_border.dart';
 import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -68,46 +69,52 @@ class FolderManagementScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Expanded(
-            child: Stack(
-              children: [
-                if (state is FolderLoading)
-                  const Center(child: CircularProgressIndicator()),
+          return Stack(
+            children: [
+              if (state is FolderLoading)
+                const Center(child: CircularProgressIndicator()),
 
-                if (state is FolderLoadSuccess && state.folders.isEmpty)
-                  const Center(child: Text('No folders available')),
+              if (state is FolderLoadSuccess && state.folders.isEmpty)
+                const Center(child: Text('No folders available')),
 
-                ListView.builder(
-                  itemCount: state.folders.length,
-                  itemBuilder: (context, index) {
-                    final folder = state.folders[index];
-                    return _FolderCard(
-                      folder: folder,
-                      onEdit: () async {
-                        final newName = await showFolderNameDialog(
-                          context: context,
-                          initialName: folder.name,
-                          title: 'Edit Folder Name',
-                          confirmLabel: 'Save',
+              ListView.builder(
+                itemCount: state.folders.length,
+                itemBuilder: (context, index) {
+                  final folder = state.folders[index];
+                  return _FolderCard(
+                    folder: folder,
+                    onEdit: () async {
+                      final newName = await showFolderNameDialog(
+                        context: context,
+                        initialName: folder.name,
+                        title: 'Edit Folder Name',
+                        confirmLabel: 'Save',
+                      );
+                      if (newName != null && newName != folder.name) {
+                        if (!context.mounted) return;
+                        context.read<FolderBloc>().add(
+                          EditFolder(folder.id, newName),
                         );
-                        if (newName != null && newName != folder.name) {
-                          if (!context.mounted) return;
+                      }
+                    },
+                    onDelete: () {
+                      _showConfirmDeleteFolderDialog(
+                        context: context,
+                        folderName: folder.name,
+                      ).then((confirmed) {
+                        if (confirmed == true) {
                           context.read<FolderBloc>().add(
-                            EditFolder(folder.id, newName),
+                            DeleteFolder(folder.id),
                           );
                         }
-                      },
-                      onDelete: () {
-                        // Handle delete action
-                        context.read<FolderBloc>().add(DeleteFolder(folder.id));
-                      },
-                    );
-                  },
-                ),
-                if (state is FolderFailure)
-                  Center(child: Text('Error: ${state.message}')),
-              ],
-            ),
+                      });
+                    },
+                  );
+                },
+              ),
+              if (state is FolderFailure)
+                Center(child: Text('Error: ${state.message}')),
+            ],
           );
         },
       ),
@@ -130,6 +137,7 @@ Future<String?> showFolderNameDialog({
     builder: (ctx) {
       const horizontalInset = 16.0;
       return AlertDialog(
+        actionsAlignment: MainAxisAlignment.center,
         insetPadding: EdgeInsets.symmetric(horizontal: horizontalInset),
         shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.card),
         title: Text(title, style: AppTextStyles.titleMedium(context)),
@@ -178,13 +186,57 @@ Future<String?> showFolderNameDialog({
   );
 }
 
+Future<bool?> _showConfirmDeleteFolderDialog({
+  required BuildContext context,
+  required String folderName,
+}) {
+  final theme = Theme.of(context);
+  const horizontalInset = 16.0;
+  return showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => AlertDialog(
+      actionsAlignment: MainAxisAlignment.center,
+      insetPadding: EdgeInsets.symmetric(horizontal: horizontalInset),
+      shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.card),
+      title: Text(
+        'Delete Folder?',
+        style: theme.textTheme.titleLarge,
+        textAlign: TextAlign.center,
+      ),
+      content: Text(
+        'Are you sure you want to permanently delete\n“$folderName”?',
+        style: theme.textTheme.bodyMedium,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        InverseTextButton(
+          text: 'Cancel',
+          onPressed: () => Navigator.of(context).pop(null),
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.onSurface.withOpacity(0.1),
+          textStyle: AppTextStyles.bodyMedium(
+            context,
+          ).withFontWeight(FontWeight.bold),
+          textColor: Theme.of(context).colorScheme.onSurface,
+        ),
+        InverseTextButton(
+          text: 'Delete',
+          backgroundColor: Theme.of(context).colorScheme.error,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
+    ),
+  );
+}
+
 class _FolderCard extends StatelessWidget {
   final FolderUiItem folder;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const _FolderCard({
-    super.key,
     required this.folder,
     required this.onEdit,
     required this.onDelete,
@@ -195,10 +247,9 @@ class _FolderCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: folder.color.withValues(alpha: 0.01),
-        border: Border.all(
-          color: folder.color.withValues(alpha: 0.1),
-          width: 1,
+        color: folder.type.chipColor.withValues(alpha: 0.1),
+        border: AppBorder.outline(
+          folder.type.foregroundColor.withValues(alpha: 0.5),
         ),
         borderRadius: AppBorderRadius.card,
       ),
@@ -210,10 +261,14 @@ class _FolderCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: folder.color.withValues(alpha: 0.1),
+                color: folder.type.chipColor,
                 borderRadius: AppBorderRadius.button,
               ),
-              child: Icon(folder.icon, size: 24, color: folder.color),
+              child: Icon(
+                folder.type.icon,
+                size: 24,
+                color: folder.type.foregroundColor,
+              ),
             ),
             const SizedBox(width: 12),
             // title & count

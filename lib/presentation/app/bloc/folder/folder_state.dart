@@ -47,6 +47,10 @@ class DeleteFolderLoadSuccess extends FolderState {
   const DeleteFolderLoadSuccess(super.folders);
 }
 
+class CreatingFolderLoadSuccess extends FolderState {
+  const CreatingFolderLoadSuccess(super.folders);
+}
+
 class CreateFolderLoadSuccess extends FolderState {
   const CreateFolderLoadSuccess(super.folders);
 }
