@@ -68,46 +68,44 @@ class FolderManagementScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return Expanded(
-            child: Stack(
-              children: [
-                if (state is FolderLoading)
-                  const Center(child: CircularProgressIndicator()),
+          return Stack(
+            children: [
+              if (state is FolderLoading)
+                const Center(child: CircularProgressIndicator()),
 
-                if (state is FolderLoadSuccess && state.folders.isEmpty)
-                  const Center(child: Text('No folders available')),
+              if (state is FolderLoadSuccess && state.folders.isEmpty)
+                const Center(child: Text('No folders available')),
 
-                ListView.builder(
-                  itemCount: state.folders.length,
-                  itemBuilder: (context, index) {
-                    final folder = state.folders[index];
-                    return _FolderCard(
-                      folder: folder,
-                      onEdit: () async {
-                        final newName = await showFolderNameDialog(
-                          context: context,
-                          initialName: folder.name,
-                          title: 'Edit Folder Name',
-                          confirmLabel: 'Save',
+              ListView.builder(
+                itemCount: state.folders.length,
+                itemBuilder: (context, index) {
+                  final folder = state.folders[index];
+                  return _FolderCard(
+                    folder: folder,
+                    onEdit: () async {
+                      final newName = await showFolderNameDialog(
+                        context: context,
+                        initialName: folder.name,
+                        title: 'Edit Folder Name',
+                        confirmLabel: 'Save',
+                      );
+                      if (newName != null && newName != folder.name) {
+                        if (!context.mounted) return;
+                        context.read<FolderBloc>().add(
+                          EditFolder(folder.id, newName),
                         );
-                        if (newName != null && newName != folder.name) {
-                          if (!context.mounted) return;
-                          context.read<FolderBloc>().add(
-                            EditFolder(folder.id, newName),
-                          );
-                        }
-                      },
-                      onDelete: () {
-                        // Handle delete action
-                        context.read<FolderBloc>().add(DeleteFolder(folder.id));
-                      },
-                    );
-                  },
-                ),
-                if (state is FolderFailure)
-                  Center(child: Text('Error: ${state.message}')),
-              ],
-            ),
+                      }
+                    },
+                    onDelete: () {
+                      // Handle delete action
+                      context.read<FolderBloc>().add(DeleteFolder(folder.id));
+                    },
+                  );
+                },
+              ),
+              if (state is FolderFailure)
+                Center(child: Text('Error: ${state.message}')),
+            ],
           );
         },
       ),
