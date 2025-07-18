@@ -12,7 +12,7 @@ class AppBorder {
 
   /// Outline border (e.g., for input fields)
   static Border outline([Color? color]) =>
-      Border.all(color: color ?? Colors.grey.shade300, width: _thick);
+      Border.all(color: color ?? Colors.grey.shade300, width: _thin);
 
   /// Thin border side (e.g., for InputDecoration)
   static BorderSide thin([Color? color]) =>

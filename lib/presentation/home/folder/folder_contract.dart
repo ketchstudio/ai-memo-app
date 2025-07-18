@@ -2,58 +2,80 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/models/folder.dart';
 
+/// UI model for your list/grid/etc.
 class FolderUiItem {
   final String id;
   final String name;
-  final IconData icon;
   final int noteCount;
-  final Color color;
+  final FolderType type;
 
   FolderUiItem({
     required this.id,
     required this.name,
-    required this.icon,
     required this.noteCount,
-    required this.color,
+    required this.type,
   });
 }
 
-// You may want a custom mapping for icons and colors:
-IconData getFolderIcon(Folder folder) {
-  // Example: assign based on name, id, or metadata
-  return Icons.folder;
+extension FolderTypeColor on FolderType {
+  /// The chip background color for each folder type
+  Color get chipColor {
+    switch (this) {
+      case FolderType.work:
+        return Colors.blue.shade100;
+      case FolderType.personal:
+        return Colors.green.shade100;
+      case FolderType.study:
+        return Colors.purple.shade100;
+      case FolderType.ideas:
+        return Colors.orange.shade100;
+      case FolderType.other:
+        return Colors.grey.shade200;
+      case FolderType.all:
+        return Colors.white; // Default for "All" folder
+    }
+  }
+
+  /// (Optional) A contrasting text/icon color
+  Color get foregroundColor {
+    switch (this) {
+      case FolderType.work:
+        return Colors.blue.shade800;
+      case FolderType.personal:
+        return Colors.green.shade800;
+      case FolderType.study:
+        return Colors.purple.shade800;
+      case FolderType.ideas:
+        return Colors.orange.shade800;
+      case FolderType.other:
+        return Colors.grey.shade800;
+      case FolderType.all:
+        return Colors.purple; // Default for "All" folder
+    }
+  }
 }
 
-Color getFolderColor(int index) {
-  // Example: assign color based on name hash or folder id
-  final colors = [
-    Colors.blue,
-    Colors.green,
-    Colors.orange,
-    Colors.purple,
-    Colors.red,
-    Colors.yellow,
-    Colors.teal,
-    Colors.pink,
-    Colors.cyan,
-    Colors.indigo,
-    Colors.brown,
-    Colors.amber,
-    Colors.lime,
-    Colors.deepOrange,
-  ];
-  return colors[index % colors.length];
+extension FolderTypeIcon on FolderType {
+  IconData get icon {
+    switch (this) {
+      case FolderType.work:
+        return Icons.work_outline;
+      case FolderType.personal:
+        return Icons.person_outline;
+      case FolderType.study:
+        return Icons.menu_book_outlined;
+      case FolderType.ideas:
+        return Icons.lightbulb_outline;
+      case FolderType.other:
+        return Icons.folder_open_outlined;
+      case FolderType.all:
+        return Icons.all_inclusive_outlined;
+    }
+  }
 }
 
-// noteCount can be passed in or default to 0
 extension FolderUiMapper on Folder {
-  FolderUiItem toUiItem(int index) {
-    return FolderUiItem(
-      id: id,
-      name: name,
-      icon: getFolderIcon(this),
-      noteCount: totalNotes,
-      color: getFolderColor(index),
-    );
+  FolderUiItem toUiItem() {
+    return FolderUiItem(id: id, name: name, noteCount: totalNotes, type: type);
   }
 }

@@ -17,7 +17,7 @@ class FolderSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 30,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: folders.length,
@@ -30,17 +30,34 @@ class FolderSelector extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF6C63FF) : Color(0xFFF6F6F8),
+                color: folders[index].type.chipColor.withValues(
+                  alpha: isSelected ? 1 : 0.5,
+                ),
                 borderRadius: BorderRadius.circular(32),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Center(
-                  child: Text(
-                    folders[index].name,
-                    style: AppTextStyles.titleSmall(context).copyWith(
-                      color: isSelected ? Colors.white : Colors.black87,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        size: 16,
+                        folders[index].type.icon,
+                        color: isSelected
+                            ? Colors.white
+                            : folders[index].type.foregroundColor,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        folders[index].name,
+                        style: AppTextStyles.bodySmall(context)
+                            .withFontWeight(FontWeight.bold)
+                            .copyWith(
+                              color: isSelected ? Colors.white : Colors.black87,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
               ),

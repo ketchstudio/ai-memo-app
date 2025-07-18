@@ -15,6 +15,8 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
     final response = await client
         .from(SupabaseDatabaseTable.foldersWithNoteCount)
         .select()
+        .order('type', ascending: false)
+        .order('created_at', ascending: false)
         .onError(
           (e, stacktrace) => throw NetworkError('Failed to fetch folders: $e'),
         );

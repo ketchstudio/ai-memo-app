@@ -34,7 +34,7 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
       onData: (folders) {
         return FolderLoadSuccess(
           folders.reversed
-              .mapIndexed((index, item) => item.toUiItem(index))
+              .map((e) => e.toUiItem())
               .toList(),
         );
       },

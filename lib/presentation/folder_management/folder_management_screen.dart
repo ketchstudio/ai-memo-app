@@ -2,6 +2,7 @@ import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.da
 import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
 import 'package:ana_flutter/core/presentation/widget/inverse_text_button.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
+import 'package:ana_flutter/presentation/theme/app_border.dart';
 import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
@@ -246,10 +247,9 @@ class _FolderCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: folder.color.withValues(alpha: 0.01),
-        border: Border.all(
-          color: folder.color.withValues(alpha: 0.1),
-          width: 1,
+        color: folder.type.chipColor.withValues(alpha: 0.1),
+        border: AppBorder.outline(
+          folder.type.foregroundColor.withValues(alpha: 0.5),
         ),
         borderRadius: AppBorderRadius.card,
       ),
@@ -261,10 +261,14 @@ class _FolderCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: folder.color.withValues(alpha: 0.1),
+                color: folder.type.chipColor,
                 borderRadius: AppBorderRadius.button,
               ),
-              child: Icon(folder.icon, size: 24, color: folder.color),
+              child: Icon(
+                folder.type.icon,
+                size: 24,
+                color: folder.type.foregroundColor,
+              ),
             ),
             const SizedBox(width: 12),
             // title & count
