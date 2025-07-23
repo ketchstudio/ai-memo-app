@@ -1,30 +1,33 @@
+import 'package:ana_flutter/domain/models/folder.dart';
+import 'package:ana_flutter/domain/models/note.dart';
 import 'package:equatable/equatable.dart';
 
 class CreateNoteRequest extends Equatable {
   final String title;
   final String content;
   final String folderId;
+  final FolderType folderType;
+  final NoteType type;
 
   const CreateNoteRequest({
     required this.title,
     required this.content,
     required this.folderId,
+    required this.folderType,
+    required this.type,
   });
-
-  /// Deserialize from JSON map
-  factory CreateNoteRequest.fromJson(Map<String, dynamic> json) {
-    return CreateNoteRequest(
-      title: json['title'] as String,
-      content: json['content'] as String,
-      folderId: json['folder_id'] as String,
-    );
-  }
 
   /// Serialize to JSON map
   Map<String, dynamic> toJson() {
-    return {'title': title, 'content': content, 'folder_id': folderId};
+    return {
+      'title': title,
+      'content': content,
+      'folder_id': folderId,
+      'folder_type': folderType.index,
+      'type': type.index,
+    };
   }
 
   @override
-  List<Object?> get props => [title, content, folderId];
+  List<Object?> get props => [title, content, folderId, folderType, type];
 }

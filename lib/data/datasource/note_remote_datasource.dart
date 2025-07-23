@@ -1,9 +1,11 @@
-import 'package:ana_flutter/core/result/result_ext.dart';
+import 'package:ana_flutter/domain/models/note.dart';
 
 import '../../../domain/models/create_note_request.dart';
 
 abstract class NoteRemoteDataSource {
-  Future<Nothing> pushNote({
-    required CreateNoteRequest body,
-  });
+  Future<List<Note>> getAll();
+
+  Future<Note> create({required CreateNoteRequest body});
+
+  Future<void> delete(String id);
 }

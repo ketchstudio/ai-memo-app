@@ -1,6 +1,8 @@
 // create_text_note_event.dart
 import 'package:equatable/equatable.dart';
 
+import '../../../../domain/models/folder.dart';
+
 abstract class CreateTextNoteEvent extends Equatable {
   const CreateTextNoteEvent();
 
@@ -31,8 +33,9 @@ class ContentChanged extends CreateTextNoteEvent {
 /// User picked a folder
 class FolderSelected extends CreateTextNoteEvent {
   final String folderId;
+  final FolderType folderType;
 
-  const FolderSelected(this.folderId);
+  const FolderSelected(this.folderId, this.folderType);
 
   @override
   List<Object?> get props => [folderId];

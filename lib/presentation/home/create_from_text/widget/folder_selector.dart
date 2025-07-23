@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class FolderSelector extends StatelessWidget {
   final List<FolderUiItem> folders;
   final int selectedIndex;
-  final ValueChanged<String> onSelected;
+  final ValueChanged<int> onSelected;
 
   const FolderSelector({
     required this.folders,
@@ -26,7 +26,7 @@ class FolderSelector extends StatelessWidget {
         itemBuilder: (context, index) {
           final bool isSelected = index == selectedIndex;
           return GestureDetector(
-            onTap: () => onSelected(folders[index].id),
+            onTap: () => onSelected(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(

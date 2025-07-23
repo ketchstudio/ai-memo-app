@@ -107,9 +107,13 @@ void showCreateTextNoteDialog(BuildContext context) {
                                   selectedIndex: folderState.folders.indexWhere(
                                     (f) => f.id == state.folderId,
                                   ),
-                                  onSelected: (id) => context
-                                      .read<CreateTextNoteBloc>()
-                                      .add(FolderSelected(id)),
+                                  onSelected: (id) =>
+                                      context.read<CreateTextNoteBloc>().add(
+                                        FolderSelected(
+                                          folderState.folders[id].id,
+                                          folderState.folders[id].type,
+                                        ),
+                                      ),
                                 ),
                                 if (folderState is FolderLoading)
                                   const Center(

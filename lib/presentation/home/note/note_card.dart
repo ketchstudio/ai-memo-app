@@ -45,14 +45,6 @@ class NoteCard extends StatelessWidget {
                   ).withFontWeight(FontWeight.bold),
                 ),
               ),
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: item.statusDotColor,
-                  shape: BoxShape.circle,
-                ),
-              ),
               const SizedBox(width: 8),
               GestureDetector(
                 onTap: onMenuTap,

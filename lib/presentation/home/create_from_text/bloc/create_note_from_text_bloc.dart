@@ -1,9 +1,10 @@
 // create_text_note_bloc.dart
 import 'package:ana_flutter/domain/models/create_note_request.dart';
-import 'package:ana_flutter/domain/usecase/memo/create_note_use_case.dart';
+import 'package:ana_flutter/domain/usecase/memo/note_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../di/service_locator.dart';
+import '../../../../domain/models/note.dart';
 import 'create_note_from_text_event.dart';
 import 'create_note_from_text_state.dart';
 
@@ -42,6 +43,7 @@ class CreateTextNoteBloc
       state.copyWith(
         folderId: event.folderId,
         status: CreateTextNoteStatus.initial,
+        folderType: event.folderType,
       ),
     );
   }
@@ -69,6 +71,8 @@ class CreateTextNoteBloc
         title: state.title,
         content: state.content,
         folderId: state.folderId,
+        folderType: state.folderType,
+        type: NoteType.text,
       ),
     );
 

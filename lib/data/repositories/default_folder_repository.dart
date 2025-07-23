@@ -8,7 +8,7 @@ import '../inmemory/folder_in_memory_datasource.dart';
 import '../remote/supabase_folder_remote_datasource.dart';
 
 class DefaultFolderRepository implements FolderRepository {
-  final MemoryFolderDataSource _local;
+  final FolderInMemoryDataSource _local;
   final SupabaseRemoteFolderDataSource _remote;
 
   DefaultFolderRepository(this._local, this._remote);

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../../domain/models/folder.dart';
 
-class MemoryFolderDataSource {
+class FolderInMemoryDataSource {
   final _controller = StreamController<List<Folder>>.broadcast();
   final List<Folder> _folders = [];
 
@@ -37,7 +37,7 @@ class MemoryFolderDataSource {
   }
 }
 
-extension FolderNoteCountOps on MemoryFolderDataSource {
+extension FolderNoteCountOps on FolderInMemoryDataSource {
   void incrementNoteCount(String folderId) {
     final idx = _folders.indexWhere((f) => f.id == folderId);
     if (idx == -1) return;
