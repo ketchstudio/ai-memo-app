@@ -14,7 +14,8 @@ class NoteInMemoryDataSource {
       _notes.where((note) => note.folderId == folderId).toList();
 
   Future<Note> create(Note note) async {
-    _notes.add(note);
+    // insert at index 0 so newest notes appear first
+    _notes.insert(0, note);
     _controller.add(List.unmodifiable(_notes));
     return note;
   }
@@ -28,6 +29,11 @@ class NoteInMemoryDataSource {
     _notes
       ..clear()
       ..addAll(notes);
+    _controller.add(List.unmodifiable(_notes));
+  }
+
+  Future<void> deleteByFolderId(String folderId) async {
+    _notes.removeWhere((note) => note.folderId == folderId);
     _controller.add(List.unmodifiable(_notes));
   }
 }

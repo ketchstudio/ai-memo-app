@@ -38,3 +38,43 @@ class HomeRefreshing extends HomeState {
   @override
   List<Object?> get props => [selectedFolderId];
 }
+
+class HomeNoteUpdated extends HomeState {
+  const HomeNoteUpdated({
+    required super.selectedFolderId,
+    required super.notes,
+  });
+
+  @override
+  List<Object?> get props => [selectedFolderId, notes];
+}
+
+class HomeNoteLoading extends HomeState {
+  const HomeNoteLoading({
+    required super.selectedFolderId,
+    required super.notes,
+  });
+
+  @override
+  List<Object?> get props => [selectedFolderId, notes];
+}
+
+class HomeNoteDeleted extends HomeState {
+  const HomeNoteDeleted({
+    required super.selectedFolderId,
+    required super.notes,
+  });
+
+  @override
+  List<Object?> get props => [selectedFolderId, notes];
+}
+
+class HomeNoteDeleting extends HomeState {
+  const HomeNoteDeleting({
+    required super.selectedFolderId,
+    required super.notes,
+  });
+
+  @override
+  List<Object?> get props => [selectedFolderId, notes];
+}

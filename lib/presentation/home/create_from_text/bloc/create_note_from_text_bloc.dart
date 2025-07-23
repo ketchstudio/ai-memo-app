@@ -57,6 +57,8 @@ class CreateTextNoteBloc
         state.folderId.isEmpty) {
       emit(
         state.copyWith(
+          content: state.content,
+          title: state.title,
           status: CreateTextNoteStatus.failure,
           errorMessage: 'Please fill all fields.',
         ),

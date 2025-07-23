@@ -85,6 +85,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
+                            controller: TextEditingController(
+                              text: state.title,
+                            ),
                             decoration: appInputDecoration(
                               context: context,
                               hintText: 'Note title...',
@@ -130,6 +133,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
+                            controller: TextEditingController(
+                              text: state.content,
+                            ),
                             minLines: 10,
                             maxLines: 10,
                             maxLength: 10_000_000,

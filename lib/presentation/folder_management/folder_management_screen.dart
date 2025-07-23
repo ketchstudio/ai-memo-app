@@ -74,7 +74,7 @@ class FolderManagementScreen extends StatelessWidget {
               if (state is FolderLoading)
                 const Center(child: CircularProgressIndicator()),
 
-              if (state is FolderLoadSuccess && state.folders.isEmpty)
+              if (state.folders.isEmpty)
                 const Center(child: Text('No folders available')),
 
               ListView.builder(
@@ -103,6 +103,7 @@ class FolderManagementScreen extends StatelessWidget {
                         folderName: folder.name,
                       ).then((confirmed) {
                         if (confirmed == true) {
+                          if (!context.mounted) return;
                           context.read<FolderBloc>().add(
                             DeleteFolder(folder.id),
                           );

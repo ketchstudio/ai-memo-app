@@ -23,10 +23,7 @@ class UseCaseModule {
     );
 
     getIt.registerSingleton<RefreshNotesWithFolderUpdateUseCase>(
-      RefreshNotesWithFolderUpdateUseCase(
-        getIt<NoteRepository>(),
-        getIt<FolderRepository>(),
-      ),
+      RefreshNotesWithFolderUpdateUseCase(getIt<NoteRepository>()),
     );
 
     getIt.registerSingleton<GetAllNotesUseCase>(
@@ -55,7 +52,7 @@ class UseCaseModule {
     );
 
     getIt.registerSingleton<DeleteFolderUseCase>(
-      DeleteFolderUseCase(getIt<FolderRepository>()),
+      DeleteFolderUseCase(getIt<FolderRepository>(), getIt<NoteRepository>()),
     );
 
     getIt.registerSingleton<RefreshFoldersUseCase>(

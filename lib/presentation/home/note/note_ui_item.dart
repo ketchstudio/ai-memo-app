@@ -6,6 +6,7 @@ import '../../../domain/models/note.dart';
 /// 1) A little UI‐only model
 class NoteUiItem {
   final String id;
+  final String folderId;
   final String title;
   final String snippet;
   final DateTime createdAt;
@@ -14,6 +15,7 @@ class NoteUiItem {
 
   NoteUiItem({
     required this.id,
+    required this.folderId,
     required this.title,
     required this.snippet,
     required this.createdAt,
@@ -36,6 +38,7 @@ extension NoteUiMapper on Note {
   NoteUiItem toUiItem() {
     return NoteUiItem(
       id: id,
+      folderId: folderId,
       title: title,
       snippet: _makeSnippet(content),
       createdAt: createdAt,

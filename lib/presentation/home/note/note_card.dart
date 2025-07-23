@@ -4,13 +4,14 @@ import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
+import 'note_menu.dart';
 import 'note_ui_item.dart';
 
 class NoteCard extends StatelessWidget {
   final NoteUiItem item;
-  final VoidCallback? onMenuTap;
+  final VoidCallback onDelete;
 
-  const NoteCard({super.key, required this.item, this.onMenuTap});
+  const NoteCard({super.key, required this.item, required this.onDelete});
 
   String _timeAgo(DateTime dt) {
     final diff = DateTime.now().difference(dt);
@@ -26,11 +27,18 @@ class NoteCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(
+        top: 4,
+        left: 16,
+        right: 0,
+        bottom: 16,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
-        border: AppBorder.outline(theme.colorScheme.onSurface.withValues(alpha: 0.2)),
+        border: AppBorder.outline(
+          theme.colorScheme.onSurface.withValues(alpha: 0.2),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,10 +54,7 @@ class NoteCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              GestureDetector(
-                onTap: onMenuTap,
-                child: const Icon(Icons.more_vert, size: 20),
-              ),
+              NoteMenu(onDelete: onDelete),
             ],
           ),
 
@@ -116,6 +121,7 @@ class NoteCard extends StatelessWidget {
               const Spacer(),
               // timestamp
               Text(_timeAgo(item.createdAt), style: theme.textTheme.bodySmall),
+              const SizedBox(width: 16),
             ],
           ),
         ],

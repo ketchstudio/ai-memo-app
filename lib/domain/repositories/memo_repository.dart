@@ -12,6 +12,8 @@ abstract class NoteRepository {
 
   AsyncResultDart<List<Note>, AppError> getByFolderId(String id);
 
+  AsyncResultDart<Nothing, AppError> deleteByFolderId(String id);
+
   AsyncResultDart<Note, AppError> create(CreateNoteRequest body);
 
   AsyncResultDart<Nothing, AppError> delete(String id);

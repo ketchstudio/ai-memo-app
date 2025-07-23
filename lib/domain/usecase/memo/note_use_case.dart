@@ -69,14 +69,12 @@ class DeleteNoteWithFolderUpdateUseCase {
 
 class RefreshNotesWithFolderUpdateUseCase {
   final NoteRepository _noteRepo;
-  final FolderRepository _folderRepo;
 
-  RefreshNotesWithFolderUpdateUseCase(this._noteRepo, this._folderRepo);
+  RefreshNotesWithFolderUpdateUseCase(this._noteRepo);
 
   /// Refreshes notes and updates folder counts.
   AsyncResultDart<Nothing, AppError> call() => runCatchingAsync(() async {
     await _noteRepo.refresh().getOrThrow();
-    await _folderRepo.refresh().getOrThrow();
     return Nothing.instance;
   });
 }

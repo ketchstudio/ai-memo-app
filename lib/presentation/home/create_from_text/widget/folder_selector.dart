@@ -31,7 +31,7 @@ class FolderSelector extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
                 color: folders[index].type.chipColor.withValues(
-                  alpha: isSelected ? 1 : 0.5,
+                  alpha: isSelected ? 1 : 0.2,
                 ),
                 borderRadius: BorderRadius.circular(32),
               ),
@@ -44,9 +44,7 @@ class FolderSelector extends StatelessWidget {
                       Icon(
                         size: 16,
                         folders[index].type.icon,
-                        color: isSelected
-                            ? Colors.white
-                            : folders[index].type.foregroundColor,
+                        color: folders[index].type.foregroundColor
                       ),
                       const SizedBox(width: 8),
                       Text(
@@ -54,7 +52,7 @@ class FolderSelector extends StatelessWidget {
                         style: AppTextStyles.bodySmall(context)
                             .withFontWeight(FontWeight.bold)
                             .copyWith(
-                              color: isSelected ? Colors.white : Colors.black87,
+                            color: folders[index].type.foregroundColor
                             ),
                       ),
                     ],

@@ -59,4 +59,12 @@ class DefaultNoteRepository implements NoteRepository {
       return Nothing.instance;
     });
   }
+
+  @override
+  AsyncResultDart<Nothing, AppError> deleteByFolderId(String id) {
+    return runCatchingAsync(() async {
+      await _local.deleteByFolderId(id);
+      return Nothing.instance;
+    });
+  }
 }

@@ -41,7 +41,7 @@ class SupabaseNoteRemoteDataSource implements NoteRemoteDataSource {
     return client
         .from(SupabaseDatabaseTable.notes)
         .select()
-        .order('created_at', ascending: true)
+        .order('created_at', ascending: false)
         .onError(
           (e, stacktrace) => throw NetworkError('Failed to fetch notes: $e'),
         )
