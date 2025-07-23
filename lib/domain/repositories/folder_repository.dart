@@ -9,7 +9,10 @@ abstract class FolderRepository {
 
   AsyncResultDart<List<Folder>, AppError> getAll();
 
-  AsyncResultDart<Folder, AppError> create(String name);
+  AsyncResultDart<Folder, AppError> create(
+    String name, {
+    FolderType type = FolderType.other,
+  });
 
   AsyncResultDart<Nothing, AppError> update(String id, String newName);
 

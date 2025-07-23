@@ -20,6 +20,26 @@ class Note extends Equatable {
     required this.createdAt,
   });
 
+  /// Deserialize from JSON map
+  /// This is typically used when fetching from a remote source
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      content: json['content'] as String,
+      folderId: json['folder_id'] as String,
+      type: NoteType.values.firstWhere(
+        (e) => e.index == json['type'],
+        orElse: () => NoteType.unknown, // Default to text if not found
+      ),
+      folderType: FolderType.values.firstWhere(
+        (e) => e.index == json['folder_type'],
+        orElse: () => FolderType.other, // Default to other if not found
+      ),
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,
@@ -33,6 +53,7 @@ class Note extends Equatable {
 }
 
 enum NoteType {
+  unknown("None"),
   text("Text"),
   audio("Audio"),
   document("Document"),

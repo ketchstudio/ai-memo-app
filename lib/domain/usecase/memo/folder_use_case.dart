@@ -1,4 +1,5 @@
 import 'package:ana_flutter/core/result/result_ext.dart';
+import 'package:ana_flutter/domain/repositories/memo_repository.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../models/app_error.dart';
@@ -47,17 +48,30 @@ class EditFolderUseCase {
 // Remove Folder
 class DeleteFolderUseCase {
   final FolderRepository repository;
+  final NoteRepository memoRepository;
 
-  DeleteFolderUseCase(this.repository);
+  DeleteFolderUseCase(this.repository, this.memoRepository);
 
-  AsyncResultDart<void, AppError> call(String id) => repository.delete(id);
+  AsyncResultDart<void, AppError> call(String id) {
+    return runCatchingAsync(() async {
+      await repository.delete(id);
+      await memoRepository.deleteByFolderId(id);
+      return Nothing.instance;
+    });
+  }
+
 }
 
 // Refresh Folders
 class RefreshFoldersUseCase {
   final FolderRepository repository;
+  final NoteRepository noteRepository;
 
-  RefreshFoldersUseCase(this.repository);
+  RefreshFoldersUseCase(this.repository, this.noteRepository);
 
-  AsyncResultDart<void, AppError> call() => repository.refresh();
+  AsyncResultDart<void, AppError> call() => runCatchingAsync(() async {
+    repository.refresh();
+    noteRepository.refresh();
+    return Nothing.instance;
+  });
 }

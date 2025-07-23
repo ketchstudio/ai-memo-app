@@ -12,6 +12,7 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
 
   @override
   Future<List<Folder>> getAll() async {
+    print('Fetching folders from Supabase...');
     final response = await client
         .from(SupabaseDatabaseTable.foldersWithNoteCount)
         .select()
@@ -24,10 +25,10 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
   }
 
   @override
-  Future<Folder> create(String name) async {
+  Future<Folder> create(String name, int type) async {
     final response = await client
         .from(SupabaseDatabaseTable.folders)
-        .insert({'name': name})
+        .insert({'name': name, 'type': type})
         .select()
         .single()
         .onError(

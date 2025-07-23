@@ -85,6 +85,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
+                            controller: TextEditingController(
+                              text: state.title,
+                            ),
                             decoration: appInputDecoration(
                               context: context,
                               hintText: 'Note title...',
@@ -107,9 +110,13 @@ void showCreateTextNoteDialog(BuildContext context) {
                                   selectedIndex: folderState.folders.indexWhere(
                                     (f) => f.id == state.folderId,
                                   ),
-                                  onSelected: (id) => context
-                                      .read<CreateTextNoteBloc>()
-                                      .add(FolderSelected(id)),
+                                  onSelected: (id) =>
+                                      context.read<CreateTextNoteBloc>().add(
+                                        FolderSelected(
+                                          folderState.folders[id].id,
+                                          folderState.folders[id].type,
+                                        ),
+                                      ),
                                 ),
                                 if (folderState is FolderLoading)
                                   const Center(
@@ -126,6 +133,9 @@ void showCreateTextNoteDialog(BuildContext context) {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: TextField(
+                            controller: TextEditingController(
+                              text: state.content,
+                            ),
                             minLines: 10,
                             maxLines: 10,
                             maxLength: 10_000_000,

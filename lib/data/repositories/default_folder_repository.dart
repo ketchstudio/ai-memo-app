@@ -8,7 +8,7 @@ import '../inmemory/folder_in_memory_datasource.dart';
 import '../remote/supabase_folder_remote_datasource.dart';
 
 class DefaultFolderRepository implements FolderRepository {
-  final MemoryFolderDataSource _local;
+  final FolderInMemoryDataSource _local;
   final SupabaseRemoteFolderDataSource _remote;
 
   DefaultFolderRepository(this._local, this._remote);
@@ -19,20 +19,50 @@ class DefaultFolderRepository implements FolderRepository {
   @override
   AsyncResultDart<List<Folder>, AppError> getAll() =>
       runCatchingAsync(() async {
-        final localFolders = await _local.getAll();
-        if (localFolders.isNotEmpty) {
-          return localFolders;
-        } else {
-          final remoteFolders = await _remote.getAll();
+        // 1) Try remote first
+        final remoteFolders = await _remote.getAll();
+        if (remoteFolders.isNotEmpty) {
           await _local.setAll(remoteFolders);
           return remoteFolders;
         }
+
+        // 2) Remote empty → build defaults
+        const defaultTypes = [
+          FolderType.work,
+          FolderType.personal,
+          FolderType.study,
+          FolderType.ideas,
+        ];
+
+        // Kick off all create‑folder calls in parallel
+        final creationFutures = defaultTypes
+            .map(
+              (type) => _remote.create(type.name, type.index),
+            ) // AsyncResultDart<Folder,AppError>
+            .toList();
+
+        // Wait for all of them to complete
+        final creationResults = await Future.wait(creationFutures);
+
+        // 3) Check for errors and collect successes
+        final createdFolders = <Folder>[];
+        for (final result in creationResults) {
+          createdFolders.add(result);
+        }
+
+        createdFolders.sort((a, b) => b.type.index.compareTo(a.type.index));
+        // 4) Cache & return
+        await _local.setAll(createdFolders);
+        return createdFolders;
       });
 
   @override
-  AsyncResultDart<Folder, AppError> create(String name) async {
+  AsyncResultDart<Folder, AppError> create(
+    String name, {
+    FolderType type = FolderType.other,
+  }) async {
     return runCatchingAsync(() async {
-      final remoteFolder = await _remote.create(name);
+      final remoteFolder = await _remote.create(name, type.index);
       await _local.create(remoteFolder);
       return remoteFolder;
     });
@@ -56,7 +86,7 @@ class DefaultFolderRepository implements FolderRepository {
 
   @override
   AsyncResultDart<Nothing, AppError> refresh() => runCatchingAsync(() async {
-    final remoteFolders = await _remote.getAll();
+    final remoteFolders = await getAll().getOrThrow();
     _local.setAll(remoteFolders);
     return Nothing.instance;
   });
