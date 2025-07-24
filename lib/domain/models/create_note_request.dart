@@ -7,6 +7,7 @@ class CreateNoteRequest extends Equatable {
   final String content;
   final String folderId;
   final FolderType folderType;
+  final String? url;
   final NoteType type;
 
   const CreateNoteRequest({
@@ -15,6 +16,7 @@ class CreateNoteRequest extends Equatable {
     required this.folderId,
     required this.folderType,
     required this.type,
+    this.url,
   });
 
   /// Serialize to JSON map
@@ -25,6 +27,7 @@ class CreateNoteRequest extends Equatable {
       'folder_id': folderId,
       'folder_type': folderType.index,
       'type': type.index,
+      if (url != null) 'youtube_url': url,
     };
   }
 

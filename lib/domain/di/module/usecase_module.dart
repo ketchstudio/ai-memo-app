@@ -3,7 +3,7 @@ import 'package:ana_flutter/domain/usecase/memo/note_use_case.dart';
 
 import '../../../di/service_locator.dart';
 import '../../repositories/folder_repository.dart';
-import '../../repositories/memo_repository.dart';
+import '../../repositories/note_repository.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
@@ -48,7 +48,7 @@ class UseCaseModule {
     );
 
     getIt.registerSingleton<EditFolderUseCase>(
-      EditFolderUseCase(getIt<FolderRepository>()),
+      EditFolderUseCase(getIt<FolderRepository>(), getIt<NoteRepository>()),
     );
 
     getIt.registerSingleton<DeleteFolderUseCase>(

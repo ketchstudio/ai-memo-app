@@ -68,7 +68,7 @@ Future<bool?> _showConfirmDeleteNoteDialog({
           onPressed: () => Navigator.of(context).pop(null),
           backgroundColor: Theme.of(
             context,
-          ).colorScheme.onSurface.withOpacity(0.1),
+          ).colorScheme.onSurface.withValues(alpha: 0.1),
           textStyle: AppTextStyles.bodyMedium(
             context,
           ).withFontWeight(FontWeight.bold),

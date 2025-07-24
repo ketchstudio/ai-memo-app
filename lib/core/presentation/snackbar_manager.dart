@@ -6,7 +6,8 @@ enum SnackbarType { info, success, warning, error }
 /// Global manager for showing SnackBars from anywhere in the app.
 class SnackbarManager {
   /// Key to access the ScaffoldMessenger.
-  static final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
+  static final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   /// Shows a SnackBar with the given message and style.
   ///
@@ -28,10 +29,10 @@ class SnackbarManager {
       duration: duration,
       action: actionLabel != null
           ? SnackBarAction(
-        label: actionLabel,
-        textColor: Colors.white,
-        onPressed: onAction ?? () {},
-      )
+              label: actionLabel,
+              textColor: Colors.white,
+              onPressed: onAction ?? () {},
+            )
           : null,
     );
 
@@ -51,7 +52,6 @@ class SnackbarManager {
       case SnackbarType.error:
         return Colors.red;
       case SnackbarType.info:
-      default:
         return Colors.blueGrey;
     }
   }

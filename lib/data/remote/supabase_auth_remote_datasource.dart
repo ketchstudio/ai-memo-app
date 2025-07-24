@@ -2,7 +2,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../datasource/auth_remote_datasource.dart';
 
-
 class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
   final SupabaseClient _client;
 

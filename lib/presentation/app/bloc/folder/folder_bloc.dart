@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:ana_flutter/di/service_locator.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../domain/usecase/memo/folder_use_case.dart';
@@ -33,9 +32,7 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
       getIt<GetFoldersStreamUseCase>().call(),
       onData: (folders) {
         return FolderLoadSuccess(
-          folders.reversed
-              .map((e) => e.toUiItem())
-              .toList(),
+          folders.reversed.map((e) => e.toUiItem()).toList(),
         );
       },
       onError: (error, stackTrace) =>

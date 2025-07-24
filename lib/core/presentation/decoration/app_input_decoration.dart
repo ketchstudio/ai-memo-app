@@ -15,16 +15,18 @@ InputDecoration appInputDecoration({
   // Dynamically scale font based on system text scale or screen size
   return InputDecoration(
     hintText: hintText,
-    hintStyle: AppTextStyles.bodyMedium(
-      context,
-    ).withFontWeight(FontWeight.bold),
+    hintStyle: AppTextStyles.bodyMedium(context)
+        .withFontWeight(FontWeight.bold)
+        .copyWith(
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+        ),
     prefixIcon: prefixIcon,
     suffixIcon: suffixIcon,
     contentPadding: contentPadding,
     filled: filled,
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(borderRadius),
-      borderSide: BorderSide(color: Colors.grey.shade300, width: 0.5),
+      borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(borderRadius),

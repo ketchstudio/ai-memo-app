@@ -3,6 +3,7 @@ import 'package:ana_flutter/presentation/theme/app_border.dart';
 import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 import 'note_menu.dart';
 import 'note_ui_item.dart';
@@ -27,12 +28,7 @@ class NoteCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: const EdgeInsets.only(
-        top: 4,
-        left: 16,
-        right: 0,
-        bottom: 16,
-      ),
+      padding: const EdgeInsets.only(top: 4, left: 16, right: 0, bottom: 16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
@@ -58,13 +54,19 @@ class NoteCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 8),
           // ── Snippet
-          Text(
-            item.snippet,
-            style: theme.textTheme.bodyMedium,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Linkify(
+              text: item.snippet,
+              style: theme.textTheme.bodyMedium,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              linkStyle: TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.none,
+              ),
+            ),
           ),
 
           const SizedBox(height: 12),
@@ -75,7 +77,7 @@ class NoteCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 decoration: BoxDecoration(
-                  color: item.type.chipColor.withValues(alpha: 0.8),
+                  color: item.type.chipColor.withValues(alpha: 0.9),
                   borderRadius: AppBorderRadius.circle(),
                 ),
                 child: Row(
@@ -97,7 +99,7 @@ class NoteCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 decoration: BoxDecoration(
-                  color: item.folderType.chipColor.withValues(alpha: 0.8),
+                  color: item.folderType.chipColor,
                   borderRadius: AppBorderRadius.circle(),
                 ),
                 child: Row(
@@ -109,7 +111,7 @@ class NoteCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      item.folderType.name,
+                      item.folderName,
                       style: AppTextStyles.bodySmall(context)
                           .copyWith(color: item.folderType.foregroundColor)
                           .withFontWeight(FontWeight.bold),
