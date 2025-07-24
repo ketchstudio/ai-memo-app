@@ -45,6 +45,7 @@ extension FolderNoteCountOps on FolderInMemoryDataSource {
     _folders[idx] = f.copyWith(totalNotes: f.totalNotes + 1);
     _controller.add(List.unmodifiable(_folders));
   }
+
   void decrementNoteCount(String folderId) {
     final idx = _folders.indexWhere((f) => f.id == folderId);
     if (idx == -1) return;
@@ -53,4 +54,3 @@ extension FolderNoteCountOps on FolderInMemoryDataSource {
     _controller.add(List.unmodifiable(_folders));
   }
 }
-

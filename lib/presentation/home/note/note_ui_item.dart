@@ -12,6 +12,7 @@ class NoteUiItem {
   final DateTime createdAt;
   final NoteType type;
   final FolderType folderType;
+  final String folderName;
 
   NoteUiItem({
     required this.id,
@@ -21,6 +22,7 @@ class NoteUiItem {
     required this.createdAt,
     required this.type,
     required this.folderType,
+    required this.folderName,
   });
 }
 
@@ -40,10 +42,11 @@ extension NoteUiMapper on Note {
       id: id,
       folderId: folderId,
       title: title,
-      snippet: _makeSnippet(content),
+      snippet: _makeSnippet(url ?? content, wordLimit: 12),
       createdAt: createdAt,
       type: type,
       folderType: folderType,
+      folderName: folderName,
     );
   }
 }

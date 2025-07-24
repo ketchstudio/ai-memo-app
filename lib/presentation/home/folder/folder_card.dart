@@ -46,12 +46,11 @@ class FolderCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         folder.name,
-                        style: AppTextStyles.bodyMedium(
-                          context,
-                        )
+                        style: AppTextStyles.bodyMedium(context)
                             .copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ).withFontWeight(FontWeight.bold),
+                              color: Theme.of(context).colorScheme.onSurface,
+                            )
+                            .withFontWeight(FontWeight.bold),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

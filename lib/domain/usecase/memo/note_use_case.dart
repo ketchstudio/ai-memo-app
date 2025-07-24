@@ -4,7 +4,7 @@ import 'package:ana_flutter/domain/models/app_error.dart';
 import 'package:ana_flutter/domain/models/create_note_request.dart';
 import 'package:ana_flutter/domain/models/note.dart';
 import 'package:ana_flutter/domain/repositories/folder_repository.dart';
-import 'package:ana_flutter/domain/repositories/memo_repository.dart';
+import 'package:ana_flutter/domain/repositories/note_repository.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../core/result/result_ext.dart';

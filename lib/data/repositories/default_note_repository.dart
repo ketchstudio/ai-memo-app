@@ -4,7 +4,7 @@ import 'package:result_dart/result_dart.dart';
 
 import '../../core/result/result_ext.dart';
 import '../../domain/models/create_note_request.dart';
-import '../../domain/repositories/memo_repository.dart';
+import '../../domain/repositories/note_repository.dart';
 import '../datasource/note_remote_datasource.dart';
 import '../inmemory/note_in_memory_datasource.dart';
 
@@ -32,6 +32,15 @@ class DefaultNoteRepository implements NoteRepository {
   @override
   AsyncResultDart<List<Note>, AppError> getByFolderId(String folderId) =>
       runCatchingAsync(() async => _local.getByFolderId(folderId));
+
+  @override
+  AsyncResultDart<Nothing, AppError> updateFolderName(
+    String id,
+    String newName,
+  ) => runCatchingAsync(() async {
+    await _local.updateFolderName(id, newName);
+    return Nothing.instance;
+  });
 
   @override
   AsyncResultDart<Note, AppError> create(CreateNoteRequest body) async {

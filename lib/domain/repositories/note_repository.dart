@@ -14,6 +14,11 @@ abstract class NoteRepository {
 
   AsyncResultDart<Nothing, AppError> deleteByFolderId(String id);
 
+  AsyncResultDart<Nothing, AppError> updateFolderName(
+    String id,
+    String newName,
+  );
+
   AsyncResultDart<Note, AppError> create(CreateNoteRequest body);
 
   AsyncResultDart<Nothing, AppError> delete(String id);

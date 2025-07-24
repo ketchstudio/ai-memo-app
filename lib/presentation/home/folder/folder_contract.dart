@@ -22,15 +22,15 @@ extension FolderTypeColor on FolderType {
   Color get chipColor {
     switch (this) {
       case FolderType.work:
-        return Colors.blue.shade50;
+        return Colors.blue.shade100;
       case FolderType.personal:
-        return Colors.green.shade50;
+        return Colors.green.shade100;
       case FolderType.study:
-        return Colors.purple.shade50;
+        return Colors.purple.shade100;
       case FolderType.ideas:
-        return Colors.orange.shade50;
+        return Colors.orange.shade100;
       case FolderType.other:
-        return Colors.grey.shade50;
+        return Colors.grey.shade100;
       case FolderType.all:
         return Colors.white; // Default for "All" folder
     }
@@ -40,17 +40,17 @@ extension FolderTypeColor on FolderType {
   Color get foregroundColor {
     switch (this) {
       case FolderType.work:
-        return Colors.blue.shade500;
+        return Colors.blue.shade400;
       case FolderType.personal:
-        return Colors.green.shade500;
+        return Colors.green.shade400;
       case FolderType.study:
-        return Colors.purple.shade500;
+        return Colors.purple.shade400;
       case FolderType.ideas:
-        return Colors.orange.shade500;
+        return Colors.orange.shade400;
       case FolderType.other:
-        return Colors.grey.shade500;
+        return Colors.grey.shade400;
       case FolderType.all:
-        return Colors.purple; // Default for "All" folder
+        return Colors.purple.shade400; // Default for "All" folder
     }
   }
 }

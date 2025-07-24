@@ -6,7 +6,7 @@ import 'package:ana_flutter/domain/repositories/auth_repository.dart';
 import 'package:ana_flutter/domain/repositories/folder_repository.dart';
 
 import '../../../di/service_locator.dart';
-import '../../../domain/repositories/memo_repository.dart';
+import '../../../domain/repositories/note_repository.dart';
 import '../../datasource/note_remote_datasource.dart';
 import '../../inmemory/note_in_memory_datasource.dart';
 import '../../remote/supabase_folder_remote_datasource.dart';

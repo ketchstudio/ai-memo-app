@@ -1,7 +1,9 @@
 import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
 import 'package:ana_flutter/presentation/app/bloc/folder/folder_event.dart';
+import 'package:ana_flutter/presentation/home/action/note_create_option.dart';
 import 'package:ana_flutter/presentation/home/bloc/home_bloc.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/create_from_text.dart';
+import 'package:ana_flutter/presentation/home/create_from_youtube/create_youtube_note.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:ana_flutter/presentation/home/home_main_action.dart';
 import 'package:ana_flutter/presentation/home/search_bar.dart';
@@ -147,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       } else {
                                         if (homeState.notes.isEmpty &&
-                                            homeState is! HomeRefreshing) {
+                                            homeState is HomeRefreshing) {
                                           return const Center(
                                             child: Padding(
                                               padding: EdgeInsets.symmetric(
@@ -185,7 +187,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: HomeMainAction(
                         onAddTap: () {
                           showNoteCreateOptionBottomSheet(context, (option) {
-                            showCreateTextNoteDialog(context);
+                            switch (option) {
+                              case NoteOption.text:
+                                showCreateTextNoteDialog(context);
+                              case NoteOption.youtube:
+                                showCreateYoutubeNoteDialog(context);
+                              default:
+                            }
                           });
                         },
                         onMindMapTap: () => context.push(AppRoute.mindMap.path),

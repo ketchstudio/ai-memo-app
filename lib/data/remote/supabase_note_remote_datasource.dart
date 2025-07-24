@@ -13,13 +13,23 @@ class SupabaseNoteRemoteDataSource implements NoteRemoteDataSource {
 
   @override
   Future<Note> create({required CreateNoteRequest body}) async {
-    final response = await client
+    final rawRes = await client
         .from(SupabaseDatabaseTable.notes)
         .insert(body.toJson())
         .select()
         .single()
         .onError(
           (e, stacktrace) => throw NetworkError('Failed to create note: $e'),
+        );
+
+    final response = await client
+        .from(SupabaseDatabaseTable.notesWithFolder)
+        .select()
+        .eq('id', rawRes['id'])
+        .single()
+        .onError(
+          (e, stacktrace) =>
+              throw NetworkError('Failed to fetch created note: $e'),
         );
 
     return Note.fromJson(response);
@@ -39,7 +49,7 @@ class SupabaseNoteRemoteDataSource implements NoteRemoteDataSource {
   @override
   Future<List<Note>> getAll() {
     return client
-        .from(SupabaseDatabaseTable.notes)
+        .from(SupabaseDatabaseTable.notesWithFolder)
         .select()
         .order('created_at', ascending: false)
         .onError(

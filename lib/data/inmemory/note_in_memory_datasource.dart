@@ -13,6 +13,19 @@ class NoteInMemoryDataSource {
   Future<List<Note>> getByFolderId(String folderId) async =>
       _notes.where((note) => note.folderId == folderId).toList();
 
+  Future<void> updateFolderName(String id, String newName) async {
+    final newNotes = _notes.map((note) {
+      if (note.folderId == id) {
+        return note.copyWith(folderName: newName);
+      }
+      return note;
+    }).toList();
+    _notes
+      ..clear()
+      ..addAll(newNotes);
+    _controller.add(List.unmodifiable(_notes));
+  }
+
   Future<Note> create(Note note) async {
     // insert at index 0 so newest notes appear first
     _notes.insert(0, note);

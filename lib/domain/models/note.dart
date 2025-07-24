@@ -9,6 +9,8 @@ class Note extends Equatable {
   final NoteType type;
   final FolderType folderType;
   final DateTime createdAt;
+  final String? url;
+  final String folderName;
 
   const Note({
     required this.id,
@@ -18,6 +20,8 @@ class Note extends Equatable {
     required this.type,
     required this.folderType,
     required this.createdAt,
+    required this.folderName,
+    this.url,
   });
 
   /// Deserialize from JSON map
@@ -37,6 +41,8 @@ class Note extends Equatable {
         orElse: () => FolderType.other, // Default to other if not found
       ),
       createdAt: DateTime.parse(json['created_at'] as String),
+      url: json['youtube_url'] as String?,
+      folderName: json['folder_name'] as String? ?? '',
     );
   }
 
@@ -49,7 +55,33 @@ class Note extends Equatable {
     createdAt,
     type,
     folderType,
+    url,
+    folderName,
   ];
+
+  Note copyWith({
+    String? id,
+    String? title,
+    String? content,
+    String? folderId,
+    NoteType? type,
+    FolderType? folderType,
+    DateTime? createdAt,
+    String? url,
+    String? folderName,
+  }) {
+    return Note(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      folderId: folderId ?? this.folderId,
+      type: type ?? this.type,
+      folderType: folderType ?? this.folderType,
+      createdAt: createdAt ?? this.createdAt,
+      url: url ?? this.url,
+      folderName: folderName ?? this.folderName,
+    );
+  }
 }
 
 enum NoteType {

@@ -31,7 +31,7 @@ class FolderSelector extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
                 color: folders[index].type.chipColor.withValues(
-                  alpha: isSelected ? 0.5 : 0.2,
+                  alpha: isSelected ? 1 : 0.2,
                 ),
                 borderRadius: BorderRadius.circular(32),
               ),

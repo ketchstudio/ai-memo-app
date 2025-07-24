@@ -25,9 +25,7 @@ class LoginScreen extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-              decoration: BoxDecoration(
-                borderRadius: AppBorderRadius.card,
-              ),
+              decoration: BoxDecoration(borderRadius: AppBorderRadius.card),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
