@@ -53,7 +53,7 @@ Future<bool?> _showConfirmDeleteNoteDialog({
       insetPadding: EdgeInsets.symmetric(horizontal: horizontalInset),
       shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.card),
       title: Text(
-        'Delete Folder?',
+        'Delete Note?',
         style: theme.textTheme.titleLarge,
         textAlign: TextAlign.center,
       ),
