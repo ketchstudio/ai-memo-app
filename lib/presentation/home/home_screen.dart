@@ -21,6 +21,7 @@ import '../app/bloc/theme_cubit.dart';
 import 'action/note_create_option_bottomsheet.dart';
 import 'bloc/home_event.dart';
 import 'bloc/home_state.dart';
+import 'common/file_picker_with_preview.dart';
 import 'folder/folder_list_view.dart';
 import 'home_app_bar.dart';
 import 'note/note_list.dart';
@@ -192,7 +193,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 showCreateTextNoteDialog(context);
                               case NoteOption.youtube:
                                 showCreateYoutubeNoteDialog(context);
-                              default:
+                              case NoteOption.recordAudio:
+                                pickAndShowPreview(context, AppFileType.audio);
+                              case NoteOption.documentFile:
+                                pickAndShowPreview(
+                                  context,
+                                  AppFileType.document,
+                                );
+                              case NoteOption.uploadImage:
+                                pickAndShowPreview(context, AppFileType.image);
                             }
                           });
                         },

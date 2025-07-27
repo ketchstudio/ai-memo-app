@@ -29,7 +29,6 @@ class FolderInMemoryDataSource {
   }
 
   Future<void> setAll(List<Folder> folders) async {
-    print('Setting folders: ${folders.length}');
     _folders
       ..clear()
       ..addAll(folders);
