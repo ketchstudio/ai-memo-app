@@ -12,7 +12,6 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
 
   @override
   Future<List<Folder>> getAll() async {
-    print('Fetching folders from Supabase...');
     final response = await client
         .from(SupabaseDatabaseTable.foldersWithNoteCount)
         .select()
