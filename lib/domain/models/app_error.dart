@@ -15,6 +15,10 @@ class NetworkError extends AppError {
   const NetworkError(super.message);
 }
 
+class AuthenticationError extends AppError {
+  const AuthenticationError(super.message);
+}
+
 class ValidationError extends AppError {
   const ValidationError(super.message);
 }

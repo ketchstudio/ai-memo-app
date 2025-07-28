@@ -28,4 +28,9 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
   User? getCurrentUser() {
     return _client.auth.currentUser;
   }
+
+  @override
+  String? get currentUserId {
+    return _client.auth.currentUser?.id;
+  }
 }

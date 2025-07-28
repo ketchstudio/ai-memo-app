@@ -1,4 +1,4 @@
-import 'package:ana_flutter/domain/usecase/memo/note_use_case.dart';
+import 'package:ana_flutter/domain/usecase/note_use_case.dart';
 import 'package:ana_flutter/presentation/home/note/note_ui_item.dart';
 import 'package:bloc/bloc.dart';
 import 'package:result_dart/result_dart.dart';

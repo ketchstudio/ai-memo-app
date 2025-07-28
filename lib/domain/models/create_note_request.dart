@@ -9,6 +9,7 @@ class CreateNoteRequest extends Equatable {
   final FolderType folderType;
   final String? url;
   final NoteType type;
+  final String? fileRemotePath;
 
   const CreateNoteRequest({
     required this.title,
@@ -17,6 +18,7 @@ class CreateNoteRequest extends Equatable {
     required this.folderType,
     required this.type,
     this.url,
+    this.fileRemotePath,
   });
 
   /// Serialize to JSON map
@@ -28,6 +30,7 @@ class CreateNoteRequest extends Equatable {
       'folder_type': folderType.index,
       'type': type.index,
       if (url != null) 'youtube_url': url,
+      if (fileRemotePath != null) 'file_remote_path': fileRemotePath,
     };
   }
 

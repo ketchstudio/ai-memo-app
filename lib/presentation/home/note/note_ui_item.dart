@@ -63,6 +63,8 @@ extension NoteTypeIcon on NoteType {
         return Icons.picture_as_pdf;
       case NoteType.video:
         return Icons.videocam;
+      case NoteType.image:
+        return Icons.image;
       case NoteType.unknown:
         return null; // No icon for unknown type
     }
@@ -81,6 +83,8 @@ extension NoteTypeColor on NoteType {
         return Colors.blue.shade100;
       case NoteType.video:
         return Colors.red.shade100;
+      case NoteType.image:
+        return Colors.green.shade100; // Assuming image type has a color
       case NoteType.unknown:
         return Colors.transparent; // No color for unknown type
     }
@@ -98,6 +102,8 @@ extension NoteTypeColor on NoteType {
         return Colors.blue.shade800;
       case NoteType.unknown:
         return Colors.transparent; // Default text color for unknown type
+      case NoteType.image:
+        return Colors.green.shade800; // Assuming image type has a color
     }
   }
 }
