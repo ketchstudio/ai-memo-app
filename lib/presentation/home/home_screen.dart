@@ -7,6 +7,7 @@ import 'package:ana_flutter/presentation/home/create_from_youtube/create_youtube
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:ana_flutter/presentation/home/home_main_action.dart';
 import 'package:ana_flutter/presentation/home/search_bar.dart';
+import 'package:ana_flutter/presentation/home/voice_recording/void_recording.dart';
 import 'package:ana_flutter/presentation/login/bloc/auth_bloc.dart';
 import 'package:ana_flutter/presentation/routers/app_router_contract.dart';
 import 'package:ana_flutter/presentation/theme/app_text_styles.dart';
@@ -194,7 +195,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               case NoteOption.youtube:
                                 showCreateYoutubeNoteDialog(context);
                               case NoteOption.recordAudio:
-                                pickAndShowPreview(context, AppFileType.audio);
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                                  ),
+                                  builder: (context) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(bottom: 20),
+                                      child: VoiceRecorderWidget(),
+                                    );
+                                  },
+                                );
                               case NoteOption.documentFile:
                                 pickAndShowPreview(
                                   context,
