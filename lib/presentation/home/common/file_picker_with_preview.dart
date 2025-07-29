@@ -164,7 +164,7 @@ class SelectFileDialog extends StatelessWidget {
                           readOnly: true,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 6),
 
                       if (state.errorMessage != null)
                         Padding(
@@ -176,7 +176,7 @@ class SelectFileDialog extends StatelessWidget {
                             ).copyWith(color: Colors.red),
                           ),
                         ),
-
+                      const SizedBox(height: 6),
                       BlocBuilder<FolderBloc, FolderState>(
                         builder: (context, folderState) {
                           return FolderSelector(
