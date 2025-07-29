@@ -1,9 +1,12 @@
-import 'package:ana_flutter/domain/usecase/memo/folder_use_case.dart';
-import 'package:ana_flutter/domain/usecase/memo/note_use_case.dart';
+import 'package:ana_flutter/domain/usecase/folder_use_case.dart';
+import 'package:ana_flutter/domain/usecase/note_use_case.dart';
 
 import '../../../di/service_locator.dart';
+import '../../repositories/auth_repository.dart';
+import '../../repositories/file_repository.dart';
 import '../../repositories/folder_repository.dart';
 import '../../repositories/note_repository.dart';
+import '../../usecase/file_usecase.dart';
 
 class UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
@@ -61,6 +64,15 @@ class UseCaseModule {
 
     getIt.registerSingleton<GetAllFoldersUseCase>(
       GetAllFoldersUseCase(getIt<FolderRepository>()),
+    );
+
+    //File Use Cases
+    getIt.registerSingleton<UploadFileUseCase>(
+      UploadFileUseCase(
+        getIt<FileRepository>(),
+        getIt<NoteRepository>(),
+        getIt<AuthRepository>(),
+      ),
     );
   }
 }

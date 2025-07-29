@@ -7,7 +7,7 @@ import 'package:ana_flutter/domain/repositories/folder_repository.dart';
 import 'package:ana_flutter/domain/repositories/note_repository.dart';
 import 'package:result_dart/result_dart.dart';
 
-import '../../../core/result/result_ext.dart';
+import '../../core/result/result_ext.dart';
 
 class GetAllNotesUseCase {
   final NoteRepository _noteRepo;

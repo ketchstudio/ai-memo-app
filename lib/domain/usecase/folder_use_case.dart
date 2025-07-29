@@ -2,9 +2,9 @@ import 'package:ana_flutter/core/result/result_ext.dart';
 import 'package:ana_flutter/domain/repositories/note_repository.dart';
 import 'package:result_dart/result_dart.dart';
 
-import '../../models/app_error.dart';
-import '../../models/folder.dart';
-import '../../repositories/folder_repository.dart';
+import '../models/app_error.dart';
+import '../models/folder.dart';
+import '../repositories/folder_repository.dart';
 
 //Init Folders
 class GetAllFoldersUseCase {

@@ -1,5 +1,5 @@
 import 'package:ana_flutter/domain/models/create_note_request.dart';
-import 'package:ana_flutter/domain/usecase/memo/note_use_case.dart';
+import 'package:ana_flutter/domain/usecase/note_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../di/service_locator.dart';
@@ -64,6 +64,9 @@ class CreateYoutubeNoteBloc
     SubmitNote event,
     Emitter<CreateYoutubeNoteState> emit,
   ) async {
+    if(state.status == CreateYoutubeNoteStatus.submitting) {
+      return; // Prevent multiple submissions
+    }
     if (state.title.isEmpty || state.url.isEmpty || state.folderId.isEmpty) {
       emit(
         state.copyWith(

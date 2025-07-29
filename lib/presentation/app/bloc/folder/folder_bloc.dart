@@ -4,7 +4,7 @@ import 'package:ana_flutter/di/service_locator.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../domain/usecase/memo/folder_use_case.dart';
+import '../../../../domain/usecase/folder_use_case.dart';
 import 'folder_event.dart';
 import 'folder_state.dart';
 

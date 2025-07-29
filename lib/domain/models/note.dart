@@ -10,6 +10,7 @@ class Note extends Equatable {
   final FolderType folderType;
   final DateTime createdAt;
   final String? url;
+  final String? fileRemotePath; // Optional field for remote file path
   final String folderName;
 
   const Note({
@@ -22,6 +23,7 @@ class Note extends Equatable {
     required this.createdAt,
     required this.folderName,
     this.url,
+    this.fileRemotePath,
   });
 
   /// Deserialize from JSON map
@@ -43,6 +45,7 @@ class Note extends Equatable {
       createdAt: DateTime.parse(json['created_at'] as String),
       url: json['youtube_url'] as String?,
       folderName: json['folder_name'] as String? ?? '',
+      fileRemotePath: json['file_remote_path'] as String?,
     );
   }
 
@@ -69,6 +72,7 @@ class Note extends Equatable {
     DateTime? createdAt,
     String? url,
     String? folderName,
+    String? fileRemotePath,
   }) {
     return Note(
       id: id ?? this.id,
@@ -80,6 +84,7 @@ class Note extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       url: url ?? this.url,
       folderName: folderName ?? this.folderName,
+      fileRemotePath: fileRemotePath ?? this.fileRemotePath,
     );
   }
 }
@@ -89,7 +94,8 @@ enum NoteType {
   text("Text"),
   audio("Audio"),
   document("Document"),
-  video("Video");
+  video("Video"),
+  image("Image");
 
   final String name;
 

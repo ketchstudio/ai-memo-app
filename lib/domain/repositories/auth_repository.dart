@@ -8,6 +8,8 @@ abstract class AuthRepository {
   /// Current datasource session, or null if not authenticated
   AuthSession? get currentSession;
 
+  String? get currentUserId;
+
   /// Signs out the user
   Future<void> signOut();
 }

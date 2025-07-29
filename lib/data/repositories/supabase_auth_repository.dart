@@ -26,4 +26,7 @@ class SupabaseAuthRepository implements AuthRepository {
   Future<void> signOut() async {
     return _remote.signOut();
   }
+
+  @override
+  String? get currentUserId => _remote.currentUserId;
 }
