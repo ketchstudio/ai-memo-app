@@ -200,7 +200,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   isScrollControlled: true,
                                   backgroundColor: Colors.transparent,
                                   shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(24),
+                                    ),
                                   ),
                                   builder: (context) {
                                     return const Padding(

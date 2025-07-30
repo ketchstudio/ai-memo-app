@@ -5,9 +5,5 @@ class AppFile {
   final String path;
   final AppFileType type;
 
-  AppFile({
-    required this.name,
-    required this.path,
-    required this.type,
-  });
+   AppFile({required this.name, required this.path, required this.type});
 }

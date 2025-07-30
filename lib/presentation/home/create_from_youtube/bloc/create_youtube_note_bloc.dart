@@ -64,7 +64,7 @@ class CreateYoutubeNoteBloc
     SubmitNote event,
     Emitter<CreateYoutubeNoteState> emit,
   ) async {
-    if(state.status == CreateYoutubeNoteStatus.submitting) {
+    if (state.status == CreateYoutubeNoteStatus.submitting) {
       return; // Prevent multiple submissions
     }
     if (state.title.isEmpty || state.url.isEmpty || state.folderId.isEmpty) {

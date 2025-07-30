@@ -36,7 +36,7 @@ class FolderSelected extends CreateFileNoteEvent {
   const FolderSelected(this.folderId, this.folderType);
 
   @override
-  List<Object?> get props => [folderId,folderType];
+  List<Object?> get props => [folderId, folderType];
 }
 
 class FileSelected extends CreateFileNoteEvent {

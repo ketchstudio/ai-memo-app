@@ -34,6 +34,12 @@ class FolderSelector extends StatelessWidget {
                   alpha: isSelected ? 0.5 : 0.2,
                 ),
                 borderRadius: BorderRadius.circular(32),
+                border: isSelected
+                    ? Border.all(
+                        color: folders[index].type.foregroundColor,
+                        width: 1,
+                      )
+                    : null,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
