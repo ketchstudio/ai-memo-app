@@ -7,7 +7,17 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../theme/app_border_radius.dart';
 import '../common/file_picker_with_preview.dart';
+
+void showVoiceRecorderDialog(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => VoiceRecorderWidget(),
+  );
+}
 
 class VoiceRecorderWidget extends StatefulWidget {
   const VoiceRecorderWidget({super.key});
@@ -20,6 +30,7 @@ class _VoiceRecorderWidgetState extends State<VoiceRecorderWidget> {
   final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
   bool _isRecorderReady = false;
   bool _isRecording = false;
+  bool _isPaused = false;
   String? _filePath;
   Duration _duration = Duration.zero;
   late final Stopwatch _stopwatch;
@@ -51,40 +62,47 @@ class _VoiceRecorderWidgetState extends State<VoiceRecorderWidget> {
     _stopwatch.reset();
     final dir = await getTemporaryDirectory();
     _filePath = '${dir.path}/voice_note.aac';
-
     await _recorder.startRecorder(toFile: _filePath, codec: Codec.aacADTS);
     _stopwatch.start();
     _ticker.start();
     setState(() {
       _isRecording = true;
+      _isPaused = false;
+    });
+  }
+
+  Future<void> pauseRecording() async {
+    if (!_isRecorderReady || !_isRecording) return;
+    await _recorder.pauseRecorder();
+    _stopwatch.stop();
+    _ticker.stop();
+    setState(() {
+      _isPaused = true;
+    });
+  }
+
+  Future<void> resumeRecording() async {
+    if (!_isRecorderReady || !_isRecording) return;
+    await _recorder.resumeRecorder();
+    _stopwatch.start();
+    _ticker.start();
+    setState(() {
+      _isPaused = false;
     });
   }
 
   Future<void> stopRecording() async {
+    if (!_isRecorderReady || !_isRecording) return;
     await _recorder.stopRecorder();
     _stopwatch.stop();
     _ticker.stop();
     setState(() {
       _isRecording = false;
+      _isPaused = false;
     });
-
     if (_filePath != null) {
-      debugPrint("Saved file: $_filePath");
-      // You can now upload or process the file as needed.
+      showFilePreview(context, _filePath!);
     }
-  }
-
-  void cancelRecording() {
-    _stopwatch.stop();
-    _ticker.stop();
-    if (_filePath != null) {
-      File(_filePath!).delete();
-    }
-    _recorder.stopRecorder();
-    setState(() {
-      _isRecording = false;
-      _duration = Duration.zero;
-    });
   }
 
   @override
@@ -98,15 +116,33 @@ class _VoiceRecorderWidgetState extends State<VoiceRecorderWidget> {
     return d.toString().split('.').first.padLeft(8, "0");
   }
 
+  Widget _buildCircleButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback? onPressed,
+  }) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      fillColor: onPressed != null ? color : color.withValues(alpha: 0.4),
+      shape: const CircleBorder(),
+      constraints: const BoxConstraints.tightFor(width: 56, height: 56),
+      child: Icon(
+        icon,
+        color: Colors.white.withValues(alpha: onPressed != null ? 1.0 : 0.4),
+        size: 28,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 300,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        margin: EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: AppBorderRadius.card,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -131,40 +167,28 @@ class _VoiceRecorderWidgetState extends State<VoiceRecorderWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _isRecording
-                    ? ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                        ),
-                        icon: const Icon(Icons.stop),
-                        label: const Text("Stop"),
-                        onPressed: _isRecording
-                            ? () {
-                                stopRecording();
-                                showFilePreview(context, _filePath ?? '');
-                              }
-                            : null,
-                      )
-                    : ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                        ),
-                        icon: const Icon(Icons.stop),
-                        label: const Text("Record"),
-                        onPressed: _isRecording ? null : startRecording,
-                      ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey.shade200,
-                    foregroundColor: Colors.black,
-                  ),
-                  onPressed: () {
-                    cancelRecording();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Cancel"),
+                _buildCircleButton(
+                  icon: _isPaused ? Icons.play_arrow : Icons.mic,
+                  color: Colors.green,
+                  onPressed: _isRecording
+                      ? (_isPaused ? resumeRecording : null)
+                      : startRecording,
+                ),
+
+                // Pause
+                _buildCircleButton(
+                  icon: Icons.pause,
+                  color: Colors.amber,
+                  onPressed: (_isRecording && !_isPaused)
+                      ? pauseRecording
+                      : null,
+                ),
+
+                // Stop
+                _buildCircleButton(
+                  icon: Icons.stop,
+                  color: Colors.red,
+                  onPressed: _isRecording || _isPaused ? stopRecording : null,
                 ),
               ],
             ),
