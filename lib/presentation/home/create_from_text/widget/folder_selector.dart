@@ -17,11 +17,11 @@ class FolderSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 30,
+      height: 35,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: folders.length,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
         separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final bool isSelected = index == selectedIndex;
@@ -37,7 +37,7 @@ class FolderSelector extends StatelessWidget {
                 border: isSelected
                     ? Border.all(
                         color: folders[index].type.foregroundColor,
-                        width: 1,
+                        width: 0.5,
                       )
                     : null,
               ),
