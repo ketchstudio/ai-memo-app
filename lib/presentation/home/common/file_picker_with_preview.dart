@@ -291,8 +291,18 @@ class SelectFileDialog extends StatelessWidget {
 
 void pickAndShowPreview(BuildContext context, AppFileType fileType) async {
   final result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: fileType.allowedExtensions,
+    type: switch (fileType) {
+      AppFileType.audio => FileType.audio,
+      AppFileType.image => FileType.image,
+      AppFileType.document => FileType.custom,
+      AppFileType.unknown => FileType.custom,
+    },
+    allowedExtensions: switch (fileType) {
+      AppFileType.audio => null,
+      AppFileType.image => null,
+      AppFileType.document => AppFileType.document.allowedExtensions,
+      AppFileType.unknown => null,
+    },
   );
 
   if (result == null || result.files.single.path == null) return;

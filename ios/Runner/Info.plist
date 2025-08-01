@@ -57,5 +57,9 @@
         </array>
       </dict>
     </array>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app needs access to your microphone to record voice notes.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app needs access to your photo library to attach images.</string>
 </dict>
 </plist>
