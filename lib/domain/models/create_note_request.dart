@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 class CreateNoteRequest extends Equatable {
   final String title;
   final String content;
-  final String folderId;
+  final String? folderId;
   final FolderType folderType;
   final String? url;
   final NoteType type;
@@ -26,11 +26,11 @@ class CreateNoteRequest extends Equatable {
     return {
       'title': title,
       'content': content,
-      'folder_id': folderId,
       'folder_type': folderType.index,
       'type': type.index,
       if (url != null) 'youtube_url': url,
       if (fileRemotePath != null) 'file_remote_path': fileRemotePath,
+      if (folderId != null) 'folder_id': folderId,
     };
   }
 

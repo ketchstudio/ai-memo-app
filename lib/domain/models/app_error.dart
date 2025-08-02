@@ -1,45 +1,68 @@
-import 'package:equatable/equatable.dart';
+import 'dart:async';
+import 'dart:io';
 
-/// Base application error
-abstract class AppError extends Equatable implements Exception {
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uni_storage/uni_storage.dart';
+
+abstract class AppError {
   final String message;
 
   const AppError(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }
 
-/// Specific error types
 class NetworkError extends AppError {
   const NetworkError(super.message);
 }
 
-class AuthenticationError extends AppError {
-  const AuthenticationError(super.message);
+class UnauthorizedError extends AppError {
+  const UnauthorizedError(super.message);
 }
 
-class ValidationError extends AppError {
-  const ValidationError(super.message);
+class NotFoundError extends AppError {
+  const NotFoundError(super.message);
 }
 
-class DatabaseError extends AppError {
-  const DatabaseError(super.message);
+class ServerError extends AppError {
+  const ServerError(super.message);
 }
 
-class UnexpectedError extends AppError {
-  const UnexpectedError(super.message);
+class UnknownError extends AppError {
+  const UnknownError(super.message);
 }
 
-/// Error mapper to convert exceptions into AppError
-class ErrorMapper {
-  /// Map Supabase error codes or other exceptions to AppError
-  static AppError map(Object error) {
-    if (error is AppError) {
-      return error;
-    }
-    // Handle Supabase specific errors
-    // Fallback
-    return UnexpectedError(error.toString());
+AppError mapSupabaseError(Object error) {
+  if (error is AppError) {
+    return error; // Already an AppError, return as is
   }
+  if (error is AuthException) {
+    if (error.statusCode == '401') {
+      return UnauthorizedError(error.message);
+    }
+    return ServerError(error.message);
+  }
+
+  if (error is PostgrestException) {
+    switch (error.code) {
+      case '42501': // insufficient_privilege
+        return UnauthorizedError(error.message);
+      case 'PGRST116': // not found or custom
+        return NotFoundError(error.message);
+      default:
+        return ServerError(error.message);
+    }
+  }
+
+  if (error is SocketException || error is ClientException) {
+    return const NetworkError('No internet connection.');
+  }
+
+  if (error is TimeoutException) {
+    return const NetworkError('Request timed out.');
+  }
+
+  if (error is FormatException) {
+    return const ServerError('Invalid response format.');
+  }
+
+  return UnknownError(error.toString());
 }

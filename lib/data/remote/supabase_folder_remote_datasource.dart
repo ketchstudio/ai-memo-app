@@ -16,10 +16,7 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
         .from(SupabaseDatabaseTable.foldersWithNoteCount)
         .select()
         .order('type', ascending: false)
-        .order('created_at', ascending: false)
-        .onError(
-          (e, stacktrace) => throw NetworkError('Failed to fetch folders: $e'),
-        );
+        .order('created_at', ascending: false);
     return response.map((json) => Folder.fromMap(json)).toList();
   }
 
@@ -29,10 +26,8 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
         .from(SupabaseDatabaseTable.folders)
         .insert({'name': name, 'type': type})
         .select()
-        .single()
-        .onError(
-          (e, stacktrace) => throw NetworkError('Failed to create folder: $e'),
-        );
+        .single();
+
     return Folder.fromMap(response);
   }
 
@@ -41,20 +36,11 @@ class SupabaseRemoteFolderDataSource extends FolderDataSource {
     return client
         .from(SupabaseDatabaseTable.folders)
         .update({'name': newName})
-        .eq('id', id)
-        .onError(
-          (e, stacktrace) => throw NetworkError('Failed to update folder: $e'),
-        );
+        .eq('id', id);
   }
 
   @override
   Future<void> delete(String id) async {
-    return client
-        .from(SupabaseDatabaseTable.folders)
-        .delete()
-        .eq('id', id)
-        .onError(
-          (e, stacktrace) => throw NetworkError('Failed to delete folder: $e'),
-        );
+    return client.from(SupabaseDatabaseTable.folders).delete().eq('id', id);
   }
 }

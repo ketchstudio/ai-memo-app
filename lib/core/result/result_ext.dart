@@ -13,7 +13,7 @@ ResultDart<T, AppError> runCatchingSync<T extends Object>(T Function() action) {
     final value = action();
     return Success(value);
   } catch (e) {
-    final appErr = ErrorMapper.map(e);
+    final appErr = mapSupabaseError(e);
     return Failure(appErr);
   }
 }
@@ -26,7 +26,7 @@ AsyncResultDart<T, AppError> runCatchingAsync<T extends Object>(
     final value = await action();
     return Success(value);
   } catch (e) {
-    final appErr = ErrorMapper.map(e);
+    final appErr = mapSupabaseError(e);
     return Failure(appErr);
   }
 }
@@ -39,7 +39,7 @@ Future<Object> runCatchingVoid<T extends Object>(
     await action();
     return Success(Nothing.instance);
   } catch (e) {
-    final appErr = ErrorMapper.map(e);
+    final appErr = mapSupabaseError(e);
     return Failure(appErr);
   }
 }

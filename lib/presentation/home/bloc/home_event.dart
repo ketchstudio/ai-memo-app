@@ -32,7 +32,7 @@ class HomeListenNotes extends HomeEvent {
 
 class HomeDeleteNote extends HomeEvent {
   final String noteId;
-  final String folderId;
+  final String? folderId;
 
   const HomeDeleteNote(this.noteId, this.folderId);
 

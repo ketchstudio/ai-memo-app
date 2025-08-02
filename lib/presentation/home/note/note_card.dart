@@ -96,29 +96,33 @@ class NoteCard extends StatelessWidget {
 
               const SizedBox(width: 8),
 
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                decoration: BoxDecoration(
-                  color: item.folderType.chipColor,
-                  borderRadius: AppBorderRadius.circle(),
+              if (item.folderId != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: item.folderType.chipColor,
+                    borderRadius: AppBorderRadius.circle(),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        item.folderType.icon,
+                        size: 16,
+                        color: item.folderType.foregroundColor,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        item.folderName,
+                        style: AppTextStyles.bodySmall(context)
+                            .copyWith(color: item.folderType.foregroundColor)
+                            .withFontWeight(FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Icon(
-                      item.folderType.icon,
-                      size: 16,
-                      color: item.folderType.foregroundColor,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      item.folderName,
-                      style: AppTextStyles.bodySmall(context)
-                          .copyWith(color: item.folderType.foregroundColor)
-                          .withFontWeight(FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
 
               const Spacer(),
               // timestamp

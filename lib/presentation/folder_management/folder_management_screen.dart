@@ -113,8 +113,6 @@ class FolderManagementScreen extends StatelessWidget {
                   );
                 },
               ),
-              if (state is FolderFailure)
-                Center(child: Text('Error: ${state.message}')),
             ],
           );
         },

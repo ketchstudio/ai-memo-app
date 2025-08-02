@@ -1,4 +1,5 @@
 import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
+import 'package:ana_flutter/di/service_locator.dart';
 import 'package:ana_flutter/presentation/app/bloc/folder/folder_event.dart';
 import 'package:ana_flutter/presentation/home/action/note_create_option.dart';
 import 'package:ana_flutter/presentation/home/bloc/home_bloc.dart';
@@ -19,6 +20,7 @@ import '../../domain/models/folder.dart';
 import '../app/bloc/folder/folder_bloc.dart';
 import '../app/bloc/folder/folder_state.dart';
 import '../app/bloc/theme_cubit.dart';
+import '../di/popup/ui_service.dart';
 import 'action/note_create_option_bottomsheet.dart';
 import 'bloc/home_event.dart';
 import 'bloc/home_state.dart';
@@ -54,6 +56,21 @@ class _HomeScreenState extends State<HomeScreen> {
             listener: (context, state) {
               if (state is HomeNoteDeleted) {
                 SnackbarManager.show(message: 'Note deleted successfully');
+              }
+
+              if (state is HomeError) {
+                getIt<UiService>().showErrorDialog(
+                  context: context,
+                  error: state.error,
+                  onRetry: () async {
+                    print('Retrying to refresh folders and notes');
+                    context.read<FolderBloc>().add(RefreshFolders());
+                    _homeBloc.add(HomeRefresh());
+                    await context.read<FolderBloc>().stream.firstWhere(
+                      (state) => state is! FolderLoading,
+                    );
+                  },
+                );
               }
             },
             builder: (context, homeState) {
@@ -138,7 +155,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                     },
                                   ),
-                                  BlocBuilder<FolderBloc, FolderState>(
+                                  BlocConsumer<FolderBloc, FolderState>(
+                                    listener: (context, state) {
+                                      if (state is FolderFailure) {
+                                        getIt<UiService>().showErrorDialog(
+                                          context: context,
+                                          error: state.appError,
+                                          onRetry: () {
+                                            context.read<FolderBloc>().add(
+                                              RefreshFolders(),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
                                     builder: (context, state) {
                                       if (state is FolderLoading) {
                                         return const Center(
