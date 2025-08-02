@@ -22,10 +22,7 @@ class UploadFileUseCase {
     required NoteType noteType,
     required FolderType folderType,
   }) async {
-    final userId = authRepository.currentUserId;
-    if (userId == null || userId.isEmpty) {
-      throw AuthenticationError('No user is currently logged in.');
-    }
+    final userId = authRepository.currentUserId().getOrThrow();
     final remotePath = await repository.uploadFile(file, userId).getOrThrow();
     return noteRepository.create(
       CreateNoteRequest(

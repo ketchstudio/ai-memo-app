@@ -10,6 +10,4 @@ abstract class AuthRemoteDataSource {
   bool isSignedIn();
 
   User? getCurrentUser();
-
-  String? get currentUserId;
 }

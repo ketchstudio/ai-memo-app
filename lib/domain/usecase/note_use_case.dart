@@ -47,7 +47,10 @@ class CreateNoteWithFolderUpdateUseCase {
   AsyncResultDart<Nothing, AppError> call(CreateNoteRequest params) =>
       runCatchingAsync(() async {
         await _noteRepo.create(params).getOrThrow();
-        await _folderRepo.incrementNoteCount(params.folderId);
+        final folderId = params.folderId;
+        if (folderId != null) {
+          await _folderRepo.incrementNoteCount(folderId).getOrThrow();
+        }
         return Nothing.instance;
       });
 }
@@ -59,10 +62,12 @@ class DeleteNoteWithFolderUpdateUseCase {
   DeleteNoteWithFolderUpdateUseCase(this._noteRepo, this._folderRepo);
 
   /// Deletes the note, then decrements the folder's totalNotes count.
-  AsyncResultDart<Nothing, AppError> call(String noteId, String folderId) =>
+  AsyncResultDart<Nothing, AppError> call(String noteId, String? folderId) =>
       runCatchingAsync(() async {
         await _noteRepo.delete(noteId).getOrThrow();
-        await _folderRepo.decrementNoteCount(folderId);
+        if (folderId != null) {
+          await _folderRepo.decrementNoteCount(folderId).getOrThrow();
+        }
         return Nothing.instance;
       });
 }

@@ -1,3 +1,4 @@
+import 'package:ana_flutter/domain/models/app_error.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:equatable/equatable.dart';
 
@@ -28,15 +29,15 @@ class FolderLoadSuccess extends FolderState {
 
 class FolderFailure extends FolderState {
   /// Carry an error message *and* the last folders you had.
-  final String message;
+  final AppError appError;
 
   const FolderFailure({
-    required this.message,
+    required this.appError,
     required List<FolderUiItem> folders,
   }) : super(folders);
 
   @override
-  List<Object?> get props => [message, ...folders];
+  List<Object?> get props => [appError, ...folders];
 }
 
 class EditFolderLoadSuccess extends FolderState {

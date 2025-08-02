@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:result_dart/result_dart.dart';
 
 import '../../../di/service_locator.dart';
+import '../../../domain/models/app_error.dart';
 import '../../../domain/models/note.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -39,14 +40,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       return;
     }
 
-    await getIt<GetAllNotesUseCaseById>().call(event.folderId).fold((notes) {
-      return emit(
-        HomeFolderSelected(
-          event.folderId,
-          notes: notes.map((note) => note.toUiItem()).toList(),
-        ),
-      );
-    }, (notes) {});
+    await getIt<GetAllNotesUseCaseById>()
+        .call(event.folderId)
+        .fold(
+          (notes) {
+            return emit(
+              HomeFolderSelected(
+                event.folderId,
+                notes: notes.map((note) => note.toUiItem()).toList(),
+              ),
+            );
+          },
+          (error) {
+            emit(
+              HomeError(
+                error: error,
+                selectedFolderId: event.folderId,
+                notes: [],
+              ),
+            );
+          },
+        );
   }
 
   void _onHomeRefresh(HomeRefresh event, Emitter<HomeState> emit) async {
@@ -85,7 +99,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
       },
       onError: (err, stack) {
-        return HomeInitial();
+        return HomeError(
+          error: mapSupabaseError(err),
+          selectedFolderId: state.selectedFolderId,
+          notes: state.notes,
+        );
       },
     );
   }

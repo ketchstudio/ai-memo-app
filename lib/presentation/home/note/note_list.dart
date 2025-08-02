@@ -8,7 +8,7 @@ import 'note_card.dart';
 
 class NotesList extends StatelessWidget {
   final List<NoteUiItem> notes;
-  final Function(String, String) onDelete;
+  final Function(String, String?) onDelete;
 
   const NotesList({super.key, required this.notes, required this.onDelete});
 

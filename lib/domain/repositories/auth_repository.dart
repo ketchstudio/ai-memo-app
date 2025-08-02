@@ -1,3 +1,6 @@
+import 'package:ana_flutter/domain/models/app_error.dart';
+import 'package:result_dart/result_dart.dart';
+
 import '../models/auth_session.dart';
 
 /// Repository interface abstracting auth logic
@@ -8,7 +11,7 @@ abstract class AuthRepository {
   /// Current datasource session, or null if not authenticated
   AuthSession? get currentSession;
 
-  String? get currentUserId;
+  ResultDart<String, AppError> currentUserId();
 
   /// Signs out the user
   Future<void> signOut();

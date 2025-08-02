@@ -1,4 +1,5 @@
 // create_text_note_state.dart
+import 'package:ana_flutter/domain/models/app_error.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../domain/models/folder.dart';
@@ -8,18 +9,18 @@ enum CreateTextNoteStatus { initial, submitting, success, failure }
 class CreateTextNoteState extends Equatable {
   final String title;
   final String content;
-  final String folderId;
+  final String? folderId;
   final FolderType folderType;
   final CreateTextNoteStatus status;
-  final String? errorMessage;
+  final AppError? error;
 
   const CreateTextNoteState({
     this.title = '',
     this.content = '',
-    this.folderId = '',
+    this.folderId,
     this.status = CreateTextNoteStatus.initial,
-    this.errorMessage,
     this.folderType = FolderType.other,
+    this.error,
   });
 
   CreateTextNoteState copyWith({
@@ -27,7 +28,7 @@ class CreateTextNoteState extends Equatable {
     String? content,
     String? folderId,
     CreateTextNoteStatus? status,
-    String? errorMessage,
+    AppError? error,
     FolderType? folderType,
   }) {
     return CreateTextNoteState(
@@ -36,10 +37,10 @@ class CreateTextNoteState extends Equatable {
       folderId: folderId ?? this.folderId,
       status: status ?? this.status,
       folderType: folderType ?? this.folderType,
-      errorMessage: errorMessage,
+      error: error,
     );
   }
 
   @override
-  List<Object?> get props => [title, content, folderId, status, errorMessage];
+  List<Object?> get props => [title, content, folderId, status, error];
 }

@@ -2,6 +2,7 @@ import 'package:ana_flutter/core/presentation/decoration/app_input_decoration.da
 import 'package:ana_flutter/core/presentation/snackbar_manager.dart';
 import 'package:ana_flutter/presentation/app/bloc/folder/folder_bloc.dart';
 import 'package:ana_flutter/presentation/app/bloc/folder/folder_state.dart';
+import 'package:ana_flutter/presentation/di/popup/ui_service.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/bloc/create_text_note_bloc.dart';
 import 'package:ana_flutter/presentation/home/create_from_text/widget/folder_selector.dart';
 import 'package:ana_flutter/presentation/theme/app_border_radius.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/presentation/widget/inverse_text_button.dart';
+import '../../../di/service_locator.dart';
 import 'bloc/create_note_from_text_event.dart';
 import 'bloc/create_note_from_text_state.dart';
 
@@ -69,6 +71,13 @@ class _CreateNoteTextDialogState extends State<CreateNoteTextDialog> {
               type: SnackbarType.success,
             );
           }
+
+          if (state.error != null) {
+            getIt<UiService>().showErrorDialog(
+              context: context,
+              error: state.error!,
+            );
+          }
         },
         builder: (context, state) {
           return Center(
@@ -106,19 +115,6 @@ class _CreateNoteTextDialogState extends State<CreateNoteTextDialog> {
                         ),
                       ),
                       SizedBox(height: 16),
-
-                      if (state.errorMessage != null &&
-                          state.errorMessage!.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            state.errorMessage ?? '',
-                            style: AppTextStyles.bodyMedium(context)
-                                .copyWith(color: Colors.red)
-                                .withFontWeight(FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
 
                       // Title input
                       Padding(

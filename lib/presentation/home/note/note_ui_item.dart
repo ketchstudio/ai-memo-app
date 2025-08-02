@@ -6,7 +6,7 @@ import '../../../domain/models/note.dart';
 /// 1) A little UI‐only model
 class NoteUiItem {
   final String id;
-  final String folderId;
+  final String? folderId;
   final String title;
   final String snippet;
   final DateTime createdAt;

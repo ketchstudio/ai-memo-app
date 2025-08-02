@@ -55,17 +55,8 @@ class CreateTextNoteBloc
     if (state.status == CreateTextNoteStatus.submitting) {
       return; // Prevent multiple submissions
     }
-    if (state.title.isEmpty ||
-        state.content.isEmpty ||
-        state.folderId.isEmpty) {
-      emit(
-        state.copyWith(
-          content: state.content,
-          title: state.title,
-          status: CreateTextNoteStatus.failure,
-          errorMessage: 'Please fill all fields.',
-        ),
-      );
+    if (state.title.isEmpty || state.content.isEmpty) {
+      emit(state.copyWith(content: state.content, title: state.title));
       return;
     }
 
@@ -87,10 +78,7 @@ class CreateTextNoteBloc
       },
       (error) {
         emit(
-          state.copyWith(
-            status: CreateTextNoteStatus.failure,
-            errorMessage: error.message,
-          ),
+          state.copyWith(status: CreateTextNoteStatus.failure, error: error),
         );
       },
     );

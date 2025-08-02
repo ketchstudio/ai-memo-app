@@ -6,16 +6,6 @@ import '../models/app_error.dart';
 import '../models/folder.dart';
 import '../repositories/folder_repository.dart';
 
-//Init Folders
-class GetAllFoldersUseCase {
-  final FolderRepository repository;
-
-  GetAllFoldersUseCase(this.repository);
-
-  AsyncResultDart<Nothing, AppError> call() =>
-      repository.getAll().map((_) => Nothing.instance);
-}
-
 // Get Folders as Stream (realtime)
 class GetFoldersStreamUseCase {
   final FolderRepository repository;
@@ -44,8 +34,8 @@ class EditFolderUseCase {
 
   AsyncResultDart<void, AppError> call(String id, String newName) =>
       runCatchingAsync(() async {
-        await repository.update(id, newName);
-        await noteRepository.updateFolderName(id, newName);
+        await repository.update(id, newName).getOrThrow();
+        await noteRepository.updateFolderName(id, newName).getOrThrow();
         return Nothing.instance;
       });
 }
@@ -59,8 +49,8 @@ class DeleteFolderUseCase {
 
   AsyncResultDart<void, AppError> call(String id) {
     return runCatchingAsync(() async {
-      await repository.delete(id);
-      await memoRepository.deleteByFolderId(id);
+      await repository.delete(id).getOrThrow();
+      await memoRepository.deleteByFolderId(id).getOrThrow();
       return Nothing.instance;
     });
   }
@@ -74,8 +64,8 @@ class RefreshFoldersUseCase {
   RefreshFoldersUseCase(this.repository, this.noteRepository);
 
   AsyncResultDart<void, AppError> call() => runCatchingAsync(() async {
-    repository.refresh();
-    noteRepository.refresh();
+    await repository.refresh().getOrThrow();
+    await noteRepository.refresh().getOrThrow();
     return Nothing.instance;
   });
 }

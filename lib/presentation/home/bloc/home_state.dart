@@ -1,3 +1,4 @@
+import 'package:ana_flutter/domain/models/app_error.dart';
 import 'package:ana_flutter/presentation/home/bloc/home_bloc.dart';
 import 'package:ana_flutter/presentation/home/note/note_ui_item.dart';
 import 'package:equatable/equatable.dart';
@@ -77,4 +78,17 @@ class HomeNoteDeleting extends HomeState {
 
   @override
   List<Object?> get props => [selectedFolderId, notes];
+}
+
+class HomeError extends HomeState {
+  final AppError error;
+
+  const HomeError({
+    required this.error,
+    required super.selectedFolderId,
+    required super.notes,
+  });
+
+  @override
+  List<Object?> get props => [selectedFolderId, notes, error];
 }

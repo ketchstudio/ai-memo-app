@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ana_flutter/di/service_locator.dart';
+import 'package:ana_flutter/domain/models/app_error.dart';
 import 'package:ana_flutter/presentation/home/folder/folder_contract.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,8 +36,10 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
           folders.reversed.map((e) => e.toUiItem()).toList(),
         );
       },
-      onError: (error, stackTrace) =>
-          FolderFailure(message: error.toString(), folders: state.folders),
+      onError: (error, stackTrace) => FolderFailure(
+        appError: mapSupabaseError(error),
+        folders: state.folders,
+      ),
     );
   }
 
@@ -49,7 +52,7 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
     result.fold(
       (_) => emit(CreateFolderLoadSuccess(state.folders)),
       (failure) =>
-          emit(FolderFailure(message: failure.message, folders: state.folders)),
+          emit(FolderFailure(appError: failure, folders: state.folders)),
     );
   }
 
@@ -67,7 +70,7 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
         emit(EditFolderLoadSuccess(state.folders));
       },
       (failure) =>
-          emit(FolderFailure(message: failure.message, folders: state.folders)),
+          emit(FolderFailure(appError: failure, folders: state.folders)),
     );
   }
 
@@ -79,10 +82,11 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
     final result = await getIt<DeleteFolderUseCase>().call(event.id);
     result.fold(
       (_) {
+        print('DeleteFolderLoadSuccess');
         emit(DeleteFolderLoadSuccess(state.folders));
       },
       (failure) =>
-          emit(FolderFailure(message: failure.message, folders: state.folders)),
+          emit(FolderFailure(appError: failure, folders: state.folders)),
     );
   }
 
@@ -91,7 +95,10 @@ class FolderBloc extends Bloc<FolderEvent, FolderState> {
     Emitter<FolderState> emit,
   ) async {
     emit(FolderLoading(state.folders));
-    getIt<RefreshFoldersUseCase>().call();
+    final result = await getIt<RefreshFoldersUseCase>().call();
+    result.fold((_) => () {}, (failure) {
+      emit(FolderFailure(appError: failure, folders: state.folders));
+    });
   }
 
   @override

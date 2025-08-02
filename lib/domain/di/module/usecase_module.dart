@@ -62,10 +62,6 @@ class UseCaseModule {
       RefreshFoldersUseCase(getIt<FolderRepository>(), getIt<NoteRepository>()),
     );
 
-    getIt.registerSingleton<GetAllFoldersUseCase>(
-      GetAllFoldersUseCase(getIt<FolderRepository>()),
-    );
-
     //File Use Cases
     getIt.registerSingleton<UploadFileUseCase>(
       UploadFileUseCase(
